@@ -1,1 +1,323 @@
+/* ============================================
+   Tokens
+   ============================================ */
+:root {
+  --paper: #e6ddc4;
+  --paper-dark: #d9cead;
+  --ink: #2b2620;
+  --ink-muted: #756a56;
+  --line: #b9ac8c;
 
+  --status-new: #4a5d7c;
+  --status-contacted: #a8342a;
+  --status-replied: #a3791f;
+  --status-offer: #3f6b4f;
+  --status-rejected: #8a7f6a;
+  --status-ignored: #a89f8c;
+
+  --font-display: "Special Elite", "Courier New", monospace;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+  --radius: 3px;
+  --shadow-card: 0 1px 0 var(--line), 0 6px 14px -8px rgba(43, 38, 32, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(0,0,0,0.03), transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(0,0,0,0.03), transparent 40%);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+}
+
+/* ============================================
+   Masthead
+   ============================================ */
+.masthead {
+  padding: 2.5rem 1.5rem 1.25rem;
+  border-bottom: 2px solid var(--ink);
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.masthead__title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.masthead__stamp-mark {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 0.2rem 0.45rem;
+  border-radius: 2px;
+  transform: rotate(-3deg);
+}
+
+.masthead h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.masthead__subtitle {
+  margin: 0.4rem 0 0;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+/* ============================================
+   Tabs (folder tabs)
+   ============================================ */
+.tabs {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  padding: 1.25rem 1.5rem 0;
+}
+
+.tab {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  background: var(--paper-dark);
+  border: 1px solid var(--line);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.tab:hover {
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--status-new);
+  outline-offset: 2px;
+}
+
+.tab.is-active {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--ink);
+  border-bottom: 1px solid var(--paper);
+  margin-bottom: -1px;
+  font-weight: 600;
+}
+
+/* ============================================
+   Board / Grid
+   ============================================ */
+.board {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 4rem;
+  border-top: 1px solid var(--ink);
+}
+
+.banner {
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--status-contacted);
+  border-radius: var(--radius);
+  background: rgba(168, 52, 42, 0.08);
+  color: var(--status-contacted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.1rem;
+  margin-top: 1.5rem;
+}
+
+.empty-state {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 3rem 1rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  margin-top: 1.5rem;
+}
+
+/* ============================================
+   Card (index card)
+   ============================================ */
+.card {
+  position: relative;
+  background: #f1ead6;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 1.1rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow: hidden;
+}
+
+/* perforated top edge, like a torn index card */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-image: radial-gradient(circle, var(--paper) 1.4px, transparent 1.6px);
+  background-size: 10px 4px;
+  background-repeat: repeat-x;
+}
+
+.card__head {
+  margin-top: 0.3rem;
+}
+
+.card__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.05rem;
+  margin: 0 0 0.15rem;
+  line-height: 1.3;
+}
+
+.card__company {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.card__description {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card__foot {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--line);
+}
+
+.card__badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+  color: #fff;
+}
+
+.card__apply {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  border: none;
+  border-radius: 2px;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.card__apply:hover {
+  background: var(--status-contacted);
+}
+
+.card__apply:focus-visible {
+  outline: 2px solid var(--status-new);
+  outline-offset: 2px;
+}
+
+.card__apply:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* Rubber stamp overlay, shown once a card has been applied to */
+.card__stamp {
+  position: absolute;
+  top: 0.9rem;
+  right: -0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  color: var(--status-contacted);
+  border: 3px solid var(--status-contacted);
+  border-radius: 6px;
+  padding: 0.15rem 0.6rem;
+  transform: rotate(-9deg) scale(0.9);
+  opacity: 0;
+  mix-blend-mode: multiply;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+.card[data-status="contacted"] .card__stamp {
+  opacity: 0.85;
+  transform: rotate(-9deg) scale(1);
+}
+
+/* Status -> color mapping */
+.card[data-status="new"] .card__badge     { background: var(--status-new); }
+.card[data-status="contacted"] .card__badge { background: var(--status-contacted); }
+.card[data-status="replied"] .card__badge  { background: var(--status-replied); }
+.card[data-status="offer"] .card__badge    { background: var(--status-offer); }
+.card[data-status="rejected"] .card__badge { background: var(--status-rejected); }
+.card[data-status="ignored"] .card__badge  { background: var(--status-ignored); }
+
+.card[data-status="rejected"],
+.card[data-status="ignored"] {
+  opacity: 0.65;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 480px) {
+  .grid { grid-template-columns: 1fr; }
+  .masthead, .tabs, .board { padding-left: 1rem; padding-right: 1rem; }
+}
