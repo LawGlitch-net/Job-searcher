@@ -1,1 +1,1649 @@
 
+{
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# Search pipeline [independent for later on our own server]",
+        "height": 144,
+        "width": 704,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        -1024
+      ],
+      "id": "7725c83f-1b02-467f-b428-ae728fde6d39",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# Email subscription search pipeline ",
+        "height": 80,
+        "width": 592,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        384
+      ],
+      "id": "7cb4de92-bda1-4aaa-bff2-87862afbf24c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -208,
+        -800
+      ],
+      "id": "c61b3966-2fc4-40ca-ae0f-ac828ee6493e",
+      "name": "Telegram Trigger",
+      "webhookId": "8835ed8c-c90c-4447-8010-1c6a5a06d3ee",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parses the message sent by the user, converts into a valid Search query & if users message is not in valid format return them the valid format as text. the valid format may include their preffered title location type of jobs salary etc...\n// the query generated is for web extenstion that only takes valid urls like Single query: https://html.duckduckgo.com/html/?q=terms+here&s=0 | Paginated: &s=0 (page 1) → &s=30 (page 2) → &s=60 (page 3), incrementing by 30 | Multiple: https://...&s=0,https://...&s=0|\n// similarly if any specific website has its own specific search url we keep a template of that url as a json format given in a section below. so we can add multiple platforms search mechanisms and get accurate search and browsing data for them. We have a specific section in code below where we will add the json of the platform {name: linkedin, query: \"demo url\" search terms: \"in the url which part is search term\", pagination: \"in the given url which part is pagination\", filters: \"same as above\", AppliedFilters: \"url version of filters user wants to apply for searches which will always remain same that he can change later in the code\"} we copy paste parts of url in designated spots and the code scans for them in the complete demo url to understand how to structure it. \n\n\n// ============================================================\n// STEP 1: Format guide — user just pastes a real search-results\n// URL (with whatever filters they already applied on the site).\n// Optional extra lines: pages count, platform override.\n// ============================================================\nconst formatGuide =\n`Send your job search like this:\n\n1. Go to any supported job site, search with whatever filters you want (title, location, salary, remote, etc), then copy the URL of the results page.\n2. Paste that URL to me. Optionally add:\n\npages: <number, default 10>\nplatform: <only needed if I can't detect it from the URL>\n\nExample:\nhttps://www.google.com/search?q=software+engineer+remote&ibp=htl;jobs\npages: 5\n\nCurrently supported platforms: {{PLATFORM_LIST}}\n\nIf your platform isn't listed, send it anyway — I'll tell you it needs to be added.`;\n\n// ============================================================\n// STEP 2: Parse the raw Telegram message\n// Pull out: the URL, an optional \"pages:\" override, an optional\n// \"platform:\" override. Everything else is ignored.\n// ============================================================\nconst rawMessage = $input.first().json.message.text || '';\n\nconst urlMatch = rawMessage.match(/https?:\\/\\/[^\\s]+/i);\nconst pagesMatch = rawMessage.match(/pages\\s*[:\\-]\\s*(\\d+)/i);\nconst platformOverrideMatch = rawMessage.match(/platform\\s*[:\\-]\\s*([a-z0-9._-]+)/i);\n\nconst pastedUrl = urlMatch ? urlMatch[0] : null;\nconst requestedPages = pagesMatch ? parseInt(pagesMatch[1], 10) : 10;\nconst platformOverride = platformOverrideMatch ? platformOverrideMatch[1].toLowerCase().trim() : null;\n\n// ============================================================\n// STEP 3: Platform registry\n// Each entry defines how to detect the platform from a domain,\n// and how to paginate a URL that already has filters applied.\n// No shared/global filter logic — each platform is self-contained.\n//\n// domainMatch     -> substring(s) to detect this platform from the pasted URL's hostname\n// paginationParam -> the query param name this platform uses for page offset\n// paginationStep  -> how much that param increases per page\n// paginationStart -> value of that param on page 1 (usually 0 or 1)\n// ============================================================\nconst PLATFORMS = {\n\n  duckduckgo: {\n    displayName: 'DuckDuckGo',\n    domainMatch: ['duckduckgo.com'],\n    paginationParam: 's',\n    paginationStep: 30,\n    paginationStart: 0\n  },\n\n  google_jobs: {\n    displayName: 'Google Jobs',\n    domainMatch: ['google.com/search'],\n    paginationParam: 'start',\n    paginationStep: 10,\n    paginationStart: 0\n  },\n\n  // --- Example only — fill in real values once confirmed by\n  // pasting a real page-1 vs page-2 URL from the site.\n  //\n  // indeed: {\n  //   displayName: 'Indeed',\n  //   domainMatch: ['indeed.com'],\n  //   paginationParam: 'start',\n  //   paginationStep: 10,\n  //   paginationStart: 0\n  // },\n  //\n  // linkedin: {\n  //   displayName: 'LinkedIn',\n  //   domainMatch: ['linkedin.com'],\n  //   paginationParam: 'start',\n  //   paginationStep: 25,\n  //   paginationStart: 0\n  // },\n\n};\n\nconst platformList = Object.values(PLATFORMS).map(p => p.displayName).join(', ');\n\n// ============================================================\n// STEP 4: Bail out early if no URL was found at all\n// ============================================================\nif (!pastedUrl) {\n  return [{\n    json: {\n      format: 'invalid',\n      validformat: formatGuide.replace('{{PLATFORM_LIST}}', platformList)\n    }\n  }];\n}\n\n// ============================================================\n// STEP 5: Detect platform — either from override or from domain\n// ============================================================\nlet parsedUrl;\ntry {\n  parsedUrl = new URL(pastedUrl);\n} catch (e) {\n  return [{\n    json: {\n      format: 'invalid',\n      validformat: `That doesn't look like a valid URL. \\n\\n${formatGuide.replace('{{PLATFORM_LIST}}', platformList)}`\n    }\n  }];\n}\n\nconst hostAndPath = (parsedUrl.hostname + parsedUrl.pathname).toLowerCase();\n\nlet platformKey = platformOverride;\nif (!platformKey) {\n  platformKey = Object.keys(PLATFORMS).find(key =>\n    PLATFORMS[key].domainMatch.some(d => hostAndPath.includes(d))\n  );\n}\n\nconst platform = platformKey ? PLATFORMS[platformKey] : null;\n\nif (!platform) {\n  return [{\n    json: {\n      format: 'invalid',\n      validformat: `I couldn't match \"${parsedUrl.hostname}\" to a configured platform.\\n\\nCurrently supported: ${platformList}\\n\\nAsk your developer to add a template for this site in the Create query code node, including its pagination parameter and step.`\n    }\n  }];\n}\n\n// ============================================================\n// STEP 6: Extract every existing query param as \"filters\" —\n// this is returned as raw extra data for the AI step later,\n// nothing is dropped or reinterpreted here.\n// ============================================================\nconst detectedFilters = {};\nfor (const [key, value] of parsedUrl.searchParams.entries()) {\n  if (key === platform.paginationParam) continue; // pagination isn't a \"filter\"\n  detectedFilters[key] = value;\n}\n\n// ============================================================\n// STEP 7: Generate the paginated URL set\n// ============================================================\nconst pageCount = Math.max(1, requestedPages);\nconst pagedUrls = [];\n\nfor (let page = 0; page < pageCount; page++) {\n  const offset = platform.paginationStart + (page * platform.paginationStep);\n  const pageUrl = new URL(parsedUrl.toString());\n  pageUrl.searchParams.set(platform.paginationParam, offset);\n  pagedUrls.push(pageUrl.toString());\n}\n\nconst finalQueryString = pagedUrls.join(',');\n\n// ============================================================\n// STEP 8: Confirmation message back to user\n// ============================================================\nconst filterSummary = Object.keys(detectedFilters).length\n  ? Object.entries(detectedFilters).map(([k, v]) => `  ${k} = ${v}`).join('\\n')\n  : '  (no extra filters detected in URL)';\n\nconst confirmationMessage =\n`Search ready on ${platform.displayName} — ${pageCount} page(s):\n\nFilters detected:\n${filterSummary}\n\nFirst page:\n${pagedUrls[0]}`;\n\n// ============================================================\n// STEP 9: Output\n// ============================================================\nreturn [{\n  json: {\n    format: 'ok',\n    query: finalQueryString,      // comma-separated, paginated URLs for the extension\n    platform: platformKey,\n    pageCount,\n    detectedFilters,               // raw key/value filters, handed to AI later downstream\n    confirmationMessage\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -800
+      ],
+      "id": "41bfc498-3df7-441d-ae85-f599b1a553f5",
+      "name": "Create query"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c694bafc-0d6f-488e-a9d2-feece9ac288d",
+              "leftValue": "={{ $json.format }}",
+              "rightValue": "ok",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        -800
+      ],
+      "id": "736ddd3d-7ee1-4f76-b4e1-cb11eb9525cf",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.validformat }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        352,
+        -656
+      ],
+      "id": "3352344d-35b8-465b-ac7d-83c0f4f078ad",
+      "name": "Send a text message",
+      "webhookId": "9aea2f33-8af9-4012-9cc7-21ae909562bf",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "browser_tasks",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "instructions",
+              "fieldValue": "={{ $('Create query').first().json.query }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        480,
+        -816
+      ],
+      "id": "000dd5c3-9371-42d2-a303-b8a15e60f9f5",
+      "name": "Enter search queries",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "WrBbUrtIzSm88wQd",
+          "name": "Supabase account 2"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const MAX_RETRIES = 60;\nconst currentAttempt = $runIndex + 1;\n\nif (currentAttempt > MAX_RETRIES) {\n  throw new Error(`Timeout: Loop exceeded ${MAX_RETRIES} attempts without a result.`);\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        848,
+        -592
+      ],
+      "id": "38d67692-be85-494b-bec1-2457cb73ee9f",
+      "name": "Loop/kill if no data arrived"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "browser_tasks",
+        "limit": 1,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Enter search queries').last().json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        672,
+        -816
+      ],
+      "id": "bc5460a4-3be7-4750-9a23-c48b7ce163bf",
+      "name": "Get extensions results",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "WrBbUrtIzSm88wQd",
+          "name": "Supabase account 2"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "browser_tasks",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "task_retrieved",
+              "condition": "is",
+              "keyValue": "={{ false }}"
+            },
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $node[\"Get extensions results\"].json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "task_retrieved",
+              "fieldValue": "={{ true }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        -832
+      ],
+      "id": "88a771df-8cf8-4d85-ad90-f48142748866",
+      "name": "Mark as completed",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "WrBbUrtIzSm88wQd",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        992,
+        -592
+      ],
+      "id": "69504934-1263-45c5-bd2a-4c90d1d3bfad",
+      "name": "Wait",
+      "webhookId": "f68d92eb-9c8c-4ec2-8bcd-3e32003141f9",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4879ca53-a57a-4eba-89b5-493006393a8e",
+              "leftValue": "={{ $json.results }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        816,
+        -816
+      ],
+      "id": "a5ba96a6-a2d9-46d8-afe8-b0197ada1fbf",
+      "name": "If1",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter the data and find \"company name\" \"url\" \"job title\" \"job description\" etc..\n\n// Assumes item.json.results is a JSON string (or array) of job objects\n// written by the browser extension, e.g.\n// [{ title, company, url, description, email }, ...]\n// If your extension uses different key names, rename them below.\n\nconst items = $input.all();\nconst output = [];\n\nfor (const item of items) {\n  let results;\n  try {\n    results = typeof item.json.results === 'string'\n      ? JSON.parse(item.json.results)\n      : item.json.results;\n  } catch (e) {\n    continue;\n  }\n\n  if (!Array.isArray(results)) results = [results];\n\n  for (const job of results) {\n    if (!job) continue;\n    output.push({\n      json: {\n        company: job.company || job.company_name || '',\n        url: job.url || job.link || '',\n        title: job.title || job.job_title || '',\n        description: job.description || job.job_description || '',\n        email: job.email || job.contact_email || null\n      }\n    });\n  }\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        -832
+      ],
+      "id": "141e720e-c188-4a14-b044-2795f790d265",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "jobs_master",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        -832
+      ],
+      "id": "06e85a7d-a471-457b-860d-51192354f077",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "DMpg1eHlqOAdF1iM",
+          "name": "Supabase account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "jobs_master",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "company",
+              "fieldValue": "={{ $json.company }}"
+            },
+            {
+              "fieldId": "url",
+              "fieldValue": "={{ $json.url }}"
+            },
+            {
+              "fieldId": "description",
+              "fieldValue": "={{ $json.description }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $json.email }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        -832
+      ],
+      "id": "55ae8ee8-11ac-4781-83e5-545a0f5b4bba",
+      "name": "Update sheet",
+      "credentials": {
+        "supabaseApi": {
+          "id": "DMpg1eHlqOAdF1iM",
+          "name": "Supabase account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=Job post search complete, {{ $('De duplicate').first().json.jobcount }} new job(s) found. Apply to them with jobhunter.github.co",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2016,
+        -832
+      ],
+      "id": "2f8366b2-bb65-4e1d-9f5e-b587b983d8b8",
+      "name": "notify user",
+      "webhookId": "ede7045d-64e5-4362-8f2c-20d14d2c74af",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Deduplicate the data from existing records\n\nconst newJobs = $('Filter').all().map(i => i.json);\nconst existingJobs = $input.all().map(i => i.json);\n\nconst existingKeys = new Set(\n  existingJobs.map(job => (job.url || `${job.title}-${job.company}`).toLowerCase().trim())\n);\n\nconst uniqueJobs = newJobs.filter(job => {\n  const key = (job.url || `${job.title}-${job.company}`).toLowerCase().trim();\n  return !existingKeys.has(key);\n});\n\nconst jobcount = uniqueJobs.length;\n\nreturn uniqueJobs.map(job => ({\n  json: { ...job, jobcount }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1632,
+        -832
+      ],
+      "id": "2a610fa3-3b8d-49fb-8dd4-79da3868eea9",
+      "name": "De duplicate"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -96,
+        528
+      ],
+      "id": "cb9ade0c-410e-4193-a3b5-b6c5442146cc",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lehhB8cdKLFSBZsO",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Email follow up bot",
+        "height": 112,
+        "width": 368,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        1056
+      ],
+      "id": "427702a3-1edf-4e73-a5d3-420ff26b286b",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter emails with specific sender names [not specific adresses but their names] in a list given below\n\n// Edit this list to match the exact display names of the job-listing senders you're subscribed to\nconst allowedSenders = [\n  'LinkedIn Job Alerts',\n  'Indeed',\n  'Glassdoor Jobs',\n  'ZipRecruiter',\n  'AngelList Talent'\n];\n\nconst items = $input.all();\nconst output = [];\n\nfor (const item of items) {\n  const fromHeader = item.json.headers?.from || item.json.from || '';\n  const senderName = fromHeader.split('<')[0].trim();\n\n  const isAllowed = allowedSenders.some(name =>\n    senderName.toLowerCase().includes(name.toLowerCase())\n  );\n  if (!isAllowed) continue;\n\n  const body = item.json.text || item.json.snippet || '';\n  const urls = body.match(/https?:\\/\\/[^\\s)>\\]\"']+/g) || [];\n\n  output.push({\n    json: {\n      sender: senderName,\n      subject: item.json.subject || '',\n      receivedAt: item.json.date || '',\n      body,\n      url: urls[0] || ''\n    }\n  });\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        528
+      ],
+      "id": "d76eaeb7-d865-4700-a2cf-8227efd64e91",
+      "name": "Filter emails"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "jobs_master",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        256,
+        528
+      ],
+      "id": "44356d55-48a6-4afe-b22b-fba4b743dfc3",
+      "name": "Get many rows1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "DMpg1eHlqOAdF1iM",
+          "name": "Supabase account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "jobs_master",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "sender",
+              "fieldValue": "={{ $json.sender }}"
+            },
+            {
+              "fieldId": "subject",
+              "fieldValue": "={{ $json.subject }}"
+            },
+            {
+              "fieldId": "url",
+              "fieldValue": "={{ $json.url }}"
+            },
+            {
+              "fieldId": "body",
+              "fieldValue": "={{ $json.body }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        640,
+        528
+      ],
+      "id": "fea62f54-1984-46c6-9351-0d0a4bbef8f6",
+      "name": "Update sheet1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "DMpg1eHlqOAdF1iM",
+          "name": "Supabase account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Deduplicate the data from existing records\n\nconst newItems = $('Filter emails').all().map(i => i.json);\nconst existingRows = $input.all().map(i => i.json);\n\nconst existingUrls = new Set(\n  existingRows.map(row => (row.url || '').toLowerCase().trim()).filter(Boolean)\n);\n\nconst uniqueItems = newItems.filter(item => {\n  const url = (item.url || '').toLowerCase().trim();\n  return url && !existingUrls.has(url);\n});\n\nreturn uniqueItems.map(item => ({ json: item }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        528
+      ],
+      "id": "c24632e8-72a6-497a-a708-cb2ee72a133a",
+      "name": "De duplicate1"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -128,
+        1184
+      ],
+      "id": "946a7b5b-31f6-45b6-b59d-29eded6d2e7e",
+      "name": "Gmail Trigger1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lehhB8cdKLFSBZsO",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter emails which are not subscriptions or promotions & match some keyword filters of a typical job application response \n\nconst promoKeywords = [\n  'unsubscribe', 'newsletter', 'special offer', 'sale', 'discount',\n  'webinar', 'promo', '% off', 'sponsored'\n];\n\nconst jobKeywords = [\n  'interview', 'application', 'position', 'role', 'candidate',\n  'resume', 'cv', 'offer letter', 'hiring', 'recruiter',\n  'next steps', 'schedule a call', 'job opportunity'\n];\n\nconst items = $input.all();\nconst output = [];\n\nfor (const item of items) {\n  const subject = (item.json.subject || '').toLowerCase();\n  const body = (item.json.text || item.json.snippet || '').toLowerCase();\n  const combined = `${subject} ${body}`;\n\n  if (promoKeywords.some(k => combined.includes(k))) continue;\n\n  const jobMatches = jobKeywords.filter(k => combined.includes(k)).length;\n\n  let classification;\n  if (jobMatches >= 2) classification = 'job_related';\n  else if (jobMatches === 1) classification = 'uncertain';\n  else continue;\n\n  output.push({ json: { ...item.json, classification } });\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        1184
+      ],
+      "id": "b30faae4-24e1-4124-9097-6bfd089ca7f6",
+      "name": "Filter emails1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ \"Here is an email I received:\\n\\nFrom: \" + $json.from + \"\\nSubject: \" + $json.subject + \"\\n\\n\" + ($json.text || $json.snippet) + \"\\n\\nWrite a professional reply on my behalf. If a CV/resume attachment is appropriate, include the exact tag [ATTACH_CV] somewhere in your reply.\" }}",
+        "options": {
+          "systemMessage": "=You are a job applicant assistant. Here is the candidate's CV: {{ $json.CV }}\n\nWhen replying to job-related emails, write in a professional, concise tone. If the email is asking for a resume/CV, include the exact literal text [ATTACH_CV] anywhere in your response — this is a system marker, not something the recipient will see."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        688,
+        1200
+      ],
+      "id": "c0b7cef5-859d-4d97-8e13-613d08e082f9",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemma-4-31b-it",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        640,
+        1376
+      ],
+      "id": "c471fd66-8ef2-4d01-bdec-f3c14163e16e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "qsJK0VyLT82bSWSK",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        240,
+        1184
+      ],
+      "id": "1f3927b6-62fd-421a-9f65-e4e60fe6bf0c",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "chatId": "8374420796",
+        "text": "={{ \"Processed \" + $('Filter emails1').all().length + \" job-related email(s) this run. Replies have been sent — check your Sent folder.\" }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        496,
+        1008
+      ],
+      "id": "e609452e-7731-4ca6-90bd-90698a25c0f7",
+      "name": "Notify user",
+      "webhookId": "984e4430-4e25-4d7b-a784-1c6a5b906fd7",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.to }}",
+        "subject": "={{ $json.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1136,
+        1200
+      ],
+      "id": "1c47fadd-e2ae-421d-8ff5-e100d66eac87",
+      "name": "Reply",
+      "webhookId": "39e4f20a-83e5-41b7-8ac4-5507758863bb",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lehhB8cdKLFSBZsO",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// parse the ai output also find if he ai wants to attach any attachments like our cv or other documents that we gave access to it if yes attach them to the email specifically where it demanded\n\nconst aiOutput = $input.first().json.output || $input.first().json.text || '';\n\nconst wantsCV = /\\[ATTACH_CV\\]/i.test(aiOutput);\nconst cleanBody = aiOutput.replace(/\\[ATTACH_CV\\]/gi, '').trim();\n\nconst originalEmail = $('Filter emails1').item.json;\n\nreturn [{\n  json: {\n    to: originalEmail.from,\n    subject: `Re: ${originalEmail.subject || ''}`,\n    body: cleanBody,\n    attachCV: wantsCV\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        976,
+        1200
+      ],
+      "id": "97752bc8-b8e4-46d2-b0a8-011eb34fe9d8",
+      "name": "email formting"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa26de20-88de-4ffb-b4b7-4418e5b52570",
+              "name": "CV",
+              "value": "=",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        1200
+      ],
+      "id": "8bf01a33-6cd7-4402-bc6f-e661433be3bf",
+      "name": "documents"
+    },
+    {
+      "parameters": {
+        "content": "# Job hunter automation \n\nThings before code \nCv updating for in website and pdf for automation \nFind an already existing open source solution \nList 10-20 websites with active jobs and good ratings (to avoid ghost listings)\n\nCreate: \n\nJob scraper from internet with search filters. Connected to web extension for scraping (duckduckgo)+ (niche specific websites from list) + Special gmail account subscribed to top job listing websites\nFrom those jobs find contact info and job info filtered out [with a special code filter] & make sure they are non duplicate by checking master google sheet.\nCreate a master google sheet with info on all the jobs list that is connected to an HTML interface \nWhen contact info (email) is found send the email directly and Mark (email sent on sheet) \nThe html file works as ui where we can send applications from and it automatically marks them as complete \nEmail bot which has info on our CV and when jobs contact us it answers them with a good response email then sends us a notification on telegram of our next job. It also has special code nodes to classify texts to understand if email is job related or not. It automatically rules out adverts and if it is still uncertain it passes the data to ai for final classification. This system also updated our html master sheet",
+        "height": 528,
+        "width": 832
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1616,
+        -288
+      ],
+      "id": "3188e21d-3f45-48ae-ab1e-5e9824308dba",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# Google method completely offline without server",
+        "height": 336,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        -304
+      ],
+      "id": "8d37d464-935f-45fa-93db-40a89da57acf",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        -208
+      ],
+      "id": "31018080-f02a-4a05-b474-449f4089ec7f",
+      "name": "Telegram Trigger1",
+      "webhookId": "dda33ae9-25e4-4281-8449-01d917f7f3e7",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parses the user's raw Telegram message into structured search parameters.\n// Expected free-text examples:\n//   \"backend developer in Bengaluru\"\n//   \"remote data analyst on indeed after:2026-07-01\"\n//   \"site:naukri.com product manager in Mumbai\"\n\n// if the format is not correct give the user the correct format in chat\n\nconst message = ($input.first().json.message && $input.first().json.message.text) || '';\nconst chatId = $input.first().json.message.chat.id;\n\n// 1. Format Validation: Check if the message is empty or doesn't contain a basic colon separator for filters\nif (!message.trim() || !message.includes(':')) {\n  const helpText = `⚠️ *Invalid Format* ⚠️\\n\\nPlease submit your job search using explicit key-value pairs separated by colons.\\n\\n*Example Format:*\\nrole: Backend Developer\\nlocation: Bengaluru\\nsite: linkedin.com\\n\\n*Available labels:* role, location, company, site, exclude, after, before, type, level`;\n  \n  return { \n    json: { \n      format: \"invalid\", \n      validformat: helpText, \n      chatId, \n      rawMessage: message \n    } \n  };\n}\n\nconst labelMap = {\n  role: ['role', 'title', 'job', 'position', 'keywords'],\n  location: ['location', 'city'],\n  company: ['company', 'employer'],\n  site: ['site', 'platform', 'board'],\n  exclude: ['exclude', 'not', 'without'],\n  after: ['after', 'since', 'posted after'],\n  before: ['before', 'until', 'posted before'],\n  type: ['type', 'employment', 'employment type'],\n  level: ['level', 'seniority', 'experience']\n};\n\nconst labelLookup = {};\nfor (const [key, words] of Object.entries(labelMap)) {\n  for (const w of words) labelLookup[w.toLowerCase()] = key];\n}\n\nconst filters = { role: [], location: [], company: [], site: [], exclude: [], after: '', before: '', type: [], level: [] };\n\nconst clauses = message.split(/[,\\n]/).map(c => c.trim()).filter(Boolean);\n\nfor (const clause of clauses) {\n  const m = clause.match(/^([a-zA-Z ]+?)\\s*:\\s*(.+)$/);\n  if (m) {\n    const key = labelLookup[m[1].trim().toLowerCase()];\n    if (key) {\n      if (key === 'after' || key === 'before') filters[key] = m[2].trim();\n      else filters[key].push(m[2].trim());\n      continue;\n    }\n  }\n  filters.role.push(clause); // unlabeled text -> treated as keywords\n}\n\nconst remoteMatch = message.match(/\\b(remote|hybrid|on-?site|work from home|wfh)\\b/i);\nconst workMode = remoteMatch ? remoteMatch[1].toLowerCase() : '';\n\nconst parts = [];\n\nif (filters.site.length) {\n  const flat = filters.site.join(' ').split(/\\s+/);\n  const siteTerms = flat.map(s => `site:${s.replace(/^https?:\\/\\//, '').replace(/\\/$/, '')}`);\n  parts.push(siteTerms.length > 1 ? `(${siteTerms.join(' OR ')})` : siteTerms[0]);\n} else {\n  const defaultSites = ['linkedin.com/jobs', 'indeed.com', 'naukri.com', 'glassdoor.com', 'weworkremotely.com'];\n  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);\n  parts.push(`site:${defaultSites[dayOfYear % defaultSites.length]}`);\n}\n\nconst roleText = filters.role.join(' ').trim();\nif (roleText) parts.push(`\"${roleText}\"`);\nif (filters.company.length) parts.push(`\"${filters.company.join(' ')}\"`);\nif (filters.location.length) parts.push(filters.location.join(' '));\nif (filters.type.length) parts.push(`\"${filters.type.join(' ')}\"`);\nif (filters.level.length) parts.push(`\"${filters.level.join(' ')}\"`);\nif (workMode) parts.push(workMode);\n\nfor (const ex of filters.exclude) {\n  ex.split(/\\s+/).forEach(word => parts.push(`-${word}`));\n}\n\nlet after = filters.after;\nif (!after) {\n  const d = new Date();\n  d.setDate(d.getDate() - 7);\n  after = d.toISOString().split('T')[0];\n}\nparts.push(`after:${after}`);\nif (filters.before) parts.push(`before:${filters.before}`);\n\nconst searchQuery = parts.join(' ').replace(/\\s+/g, ' ').trim();\n\n// 2. Format Validated Successfully: Return the query with format \"ok\"\nreturn { \n  json: { \n    format: \"ok\", \n    searchQuery, \n    chatId, \n    rawMessage: message \n  } \n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        -208
+      ],
+      "id": "01ae62a3-51e4-4e4d-b409-3c049e5cc770",
+      "name": "Create search query"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "jobs_master",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1536,
+        -176
+      ],
+      "id": "cbf44caa-45a7-48c4-8e18-4130b3695f8e",
+      "name": "Get many rows2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "DMpg1eHlqOAdF1iM",
+          "name": "Supabase account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Deduplicate newly-found jobs against records already stored in Supabase\n\nconst newJobs = $('Extract Results6').all().map(i => i.json);\nconst existingJobs = $input.all().map(i => i.json);\n\nconst existingKeys = new Set(\n  existingJobs.map(job => (job.url || `${job.title}-${job.company}`).toLowerCase().trim())\n);\n\nconst uniqueJobs = newJobs.filter(job => {\n  const key = (job.url || `${job.title}-${job.company}`).toLowerCase().trim();\n  return !existingKeys.has(key);\n});\n\nreturn uniqueJobs.map(job => ({ json: job }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1744,
+        -176
+      ],
+      "id": "4e0f7ac8-ca30-4bcf-a67c-bd5de62b1889",
+      "name": "De duplicate2"
+    },
+    {
+      "parameters": {
+        "tableId": "jobs_master",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "company",
+              "fieldValue": "={{ $json.company }}"
+            },
+            {
+              "fieldId": "url",
+              "fieldValue": "={{ $json.url }}"
+            },
+            {
+              "fieldId": "description",
+              "fieldValue": "={{ $json.description }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $json.email }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        -176
+      ],
+      "id": "8ad05082-6804-4025-b4ff-e3d4490f1dcc",
+      "name": "Update sheet2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "DMpg1eHlqOAdF1iM",
+          "name": "Supabase account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.totalNewJobs }} new job(s) found.\nGo to https://lawglitch-net.github.io/Job-searcher/ to apply.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2512,
+        -160
+      ],
+      "id": "1cec4f73-f071-459c-a7b6-a9e2c6b8f99c",
+      "name": "Send a text message1",
+      "webhookId": "12c1f8d4-8466-47e3-bf4d-417a977b4ce9",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/customsearch/v1",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "=AIzaSyDxcgjTnwCe7eUQJNR-WgfAH-ZknewOpSU"
+            },
+            {
+              "name": "cx",
+              "value": "87d7d03d60ead4150"
+            },
+            {
+              "name": "q",
+              "value": "={{ $json.searchQuery }}"
+            },
+            {
+              "name": "start",
+              "value": "={{ $runIndex == 0 ? $node[\"Config1\"].json.currentStartIndex : $node[\"Pagination Check6\"].json.startIndex }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        -112
+      ],
+      "id": "47a5a3b4-0a59-4cb0-8daf-a06db563c077",
+      "name": "Search Google6"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Turns the Google Custom Search JSON response into job-record objects\n// matching the jobs_master columns: title, company, url, description, email\n\nconst response = $input.first().json;\nconst items = response.items || [];\n\nif (items.length === 0) {\n  return [];\n}\n\n// Basic relevance filter -- keep only results that actually look like job postings\nconst jobKeywords = /\\b(hiring|job|jobs|career|careers|vacancy|position|apply|opening|recruit)\\b/i;\nconst emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/;\n\nconst results = [];\n\nfor (const item of items) {\n  const title = (item.title || '').trim();\n  const snippet = (item.snippet || '').trim();\n  const url = item.link || '';\n\n  if (!url) continue;\n  if (!jobKeywords.test(title) && !jobKeywords.test(snippet)) continue;\n\n  // Try a few common title patterns to guess the company name:\n  //   \"Software Engineer at Acme Corp\"\n  //   \"Software Engineer - Acme Corp | LinkedIn\"\n  let company = '';\n  const atMatch = title.match(/\\bat\\s+([A-Za-z0-9&.,'\\- ]+?)(\\s*[-|]|$)/i);\n  const dashMatch = title.match(/[-|]\\s*([A-Za-z0-9&.,'\\- ]+?)\\s*(\\||$)/);\n  if (atMatch) {\n    company = atMatch[1].trim();\n  } else if (dashMatch) {\n    company = dashMatch[1].trim();\n  } else if (item.displayLink) {\n    company = item.displayLink.replace(/^www\\./, '');\n  }\n\n  const emailMatch = snippet.match(emailRegex);\n  const email = emailMatch ? emailMatch[0] : '';\n\n  results.push({\n    json: {\n      title,\n      company,\n      url,\n      description: snippet,\n      email\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        -176
+      ],
+      "id": "b64d7135-9271-4ca3-9791-2faf1296c961",
+      "name": "Extract Results6"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Decides whether to fetch another page of Google results, and keeps a\n// running total of newly-inserted jobs across all pagination iterations\n// (n8n's per-run node outputs don't accumulate on their own, so we use\n// workflow static data as a small persistent counter for this execution).\n\nconst maxPages = 10;\nconst currentPage = $runIndex + 1;\n\nconst staticData = $getWorkflowStaticData('node');\nif ($runIndex === 0) staticData.totalNewJobs = 0;\nstaticData.totalNewJobs += $input.all().length;\n\n// Stop early if the last Google page returned no results at all,\n// so we don't burn API quota paging through an exhausted result set\nconst lastSearchItems = ($('Search Google6').first().json || {}).items;\nconst noMoreResults = !lastSearchItems || lastSearchItems.length === 0;\n\nreturn {\n  json: {\n    continueLoop: currentPage < maxPages && !noMoreResults,\n    startIndex: (currentPage * 10) + 1,\n    totalNewJobs: staticData.totalNewJobs,\n    chatId: $('Config1').first().json.chatId\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2096,
+        -176
+      ],
+      "id": "0244c5f0-8d70-4044-8fbf-0b43752dd251",
+      "name": "Pagination6"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "faef2862-80a4-465b-9e0b-be5b9753dcbd",
+              "leftValue": "={{ $json.continueLoop }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2272,
+        -176
+      ],
+      "id": "ea6ce8df-5e96-4af3-9a1f-8516473e3410",
+      "name": "Pagination Check6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "searchQuery",
+              "name": "searchQuery",
+              "value": "={{ $json.searchQuery }}",
+              "type": "string"
+            },
+            {
+              "id": "maxPages",
+              "name": "maxPages",
+              "value": 10,
+              "type": "number"
+            },
+            {
+              "id": "currentPage",
+              "name": "currentPage",
+              "value": 1,
+              "type": "number"
+            },
+            {
+              "id": "currentStartIndex",
+              "name": "currentStartIndex",
+              "value": 1,
+              "type": "number"
+            },
+            {
+              "id": "chatId",
+              "name": "chatId",
+              "value": "={{ $json.chatId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        -224
+      ],
+      "id": "6105768a-db9e-401f-8de7-d9638cbd4f4b",
+      "name": "Config1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "searchQuery",
+              "name": "searchQuery",
+              "value": "={{ $('Config1').first().json.searchQuery }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        384,
+        80
+      ],
+      "id": "c913c532-bb14-4679-b2ad-50fac139f538",
+      "name": "Config2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c694bafc-0d6f-488e-a9d2-feece9ac288d",
+              "leftValue": "={{ $json.format }}",
+              "rightValue": "ok",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        160,
+        -208
+      ],
+      "id": "b08c8597-2169-4628-afb0-c2ed56bc8d80",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.chat.id }}",
+        "text": "={{ $json.validformat }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        -32
+      ],
+      "id": "99299317-dba5-4d55-a1ef-95394ef3b7e9",
+      "name": "Send a text message2",
+      "webhookId": "9aea2f33-8af9-4012-9cc7-21ae909562bf",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.totalNewJobs }} new job(s) found. {{ $json.text }}\nGo to https://lawglitch-net.github.io/Job-searcher/ to apply.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1520,
+        96
+      ],
+      "id": "fe90e2d4-147b-4e8f-900a-f87de984dce1",
+      "name": "Send a text message3",
+      "webhookId": "12c1f8d4-8466-47e3-bf4d-417a977b4ce9",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// end the search and notify the user on how many jobs were found\n\nconst staticData = $getWorkflowStaticData('node');\nconst totalNewJobs = staticData.totalNewJobs || 0;\nconst chatId = $('Config1').first().json.chatId;\n\nlet text;\nif (totalNewJobs === 0) {\n  text = 'Try loosening your search — broaden the location, drop an exclusion, or remove the date filter to broaden the search.';\n} else {\n  text = `${totalNewJobs} new job${totalNewJobs === 1 ? '' : 's'} found.\\nGo to https://lawglitch-net.github.io/Job-searcher/ to apply.`;\n}\n\nreturn { json: { chatId, text, totalNewJobs } };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        96
+      ],
+      "id": "55bdfa88-03ea-4bf6-9833-9f5d0b9c8555",
+      "name": "No results"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9b981523-6dd1-4759-8a05-b25a25f39b95",
+              "leftValue": "={{ ($json.items && $json.items.length > 0) || $runIndex > 0 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1056,
+        -112
+      ],
+      "id": "bd5f6078-aff1-4ef7-8ca1-5ffdf36a6351",
+      "name": "results exists?"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Create query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create query": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Enter search queries",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enter search queries": {
+      "main": [
+        [
+          {
+            "node": "Get extensions results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop/kill if no data arrived": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get extensions results": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark as completed": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get extensions results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Mark as completed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop/kill if no data arrived",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "De duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update sheet": {
+      "main": [
+        [
+          {
+            "node": "notify user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "De duplicate": {
+      "main": [
+        [
+          {
+            "node": "Update sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filter emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter emails": {
+      "main": [
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        [
+          {
+            "node": "De duplicate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "De duplicate1": {
+      "main": [
+        [
+          {
+            "node": "Update sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Filter emails1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter emails1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "email formting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Notify user",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reply": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "email formting": {
+      "main": [
+        [
+          {
+            "node": "Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "documents": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Create search query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create search query": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows2": {
+      "main": [
+        [
+          {
+            "node": "De duplicate2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "De duplicate2": {
+      "main": [
+        [
+          {
+            "node": "Update sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update sheet2": {
+      "main": [
+        [
+          {
+            "node": "Pagination6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Google6": {
+      "main": [
+        [
+          {
+            "node": "results exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Results6": {
+      "main": [
+        [
+          {
+            "node": "Get many rows2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pagination6": {
+      "main": [
+        [
+          {
+            "node": "Pagination Check6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pagination Check6": {
+      "main": [
+        [
+          {
+            "node": "Config2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config1": {
+      "main": [
+        [
+          {
+            "node": "Search Google6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config2": {
+      "main": [
+        [
+          {
+            "node": "Search Google6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Config1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No results": {
+      "main": [
+        [
+          {
+            "node": "Send a text message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "results exists?": {
+      "main": [
+        [
+          {
+            "node": "Extract Results6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5b60e15d306cf38c092f0b1a3594b5e05f7b1ac66b5a44ec0c1645ae47b1a70e"
+  }
+}
