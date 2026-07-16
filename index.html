@@ -1,1 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Case Files</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+
+  <header class="masthead">
+    <div class="masthead__title">
+      <span class="masthead__stamp-mark">JOB</span>
+      <h1>Case Files</h1>
+    </div>
+    <p class="masthead__subtitle">Every lead, tracked. Every application, on the record.</p>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Filter by status">
+    <button class="tab is-active" data-status="all">All</button>
+    <button class="tab" data-status="new">New</button>
+    <button class="tab" data-status="contacted">Applied</button>
+    <button class="tab" data-status="replied">Replied</button>
+    <button class="tab" data-status="offer">Offer</button>
+    <button class="tab" data-status="rejected">Rejected</button>
+    <button class="tab" data-status="ignored">Ignored</button>
+  </nav>
+
+  <main class="board">
+    <div id="statusBanner" class="banner" hidden></div>
+    <div id="grid" class="grid" aria-live="polite"></div>
+    <p id="emptyState" class="empty-state" hidden>No cases in this drawer yet.</p>
+  </main>
+
+  <template id="cardTemplate">
+    <article class="card" data-status="new">
+      <div class="card__stamp" aria-hidden="true">APPLIED</div>
+      <header class="card__head">
+        <h2 class="card__title"></h2>
+        <p class="card__company"></p>
+      </header>
+      <p class="card__description"></p>
+      <footer class="card__foot">
+        <span class="card__badge"></span>
+        <button class="card__apply" type="button">Apply</button>
+      </footer>
+    </article>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
