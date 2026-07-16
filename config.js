@@ -7,5 +7,5 @@
 // Row Level Security policies allow. jobs_master currently allows
 // public SELECT and UPDATE (see your schema), so that's all this key can do.
 
-window.SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
-window.SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+window.SUPABASE_URL = "https://fylssglxqhgukjqkpmfr.supabase.co";
+window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5bHNzZ2x4cWhndWtqcWtwbWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NTg1NTgsImV4cCI6MjA5OTQzNDU1OH0.Cp8XKtHpXj8MadvO797fR1Migum1yyQMjMjPJs9egZk";
