@@ -488,19 +488,19 @@
           "fieldValues": [
             {
               "fieldId": "sender",
-              "fieldValue": "={{ $json.sender }}"
+              "fieldValue": "={{ $('Filter emails').last().json.sender }}"
             },
             {
               "fieldId": "subject",
-              "fieldValue": "={{ $json.subject }}"
+              "fieldValue": "={{ $('Filter emails').last().json.subject }}"
             },
             {
               "fieldId": "url",
-              "fieldValue": "={{ $json.url }}"
+              "fieldValue": "={{ $('Filter emails').last().json.url }}"
             },
             {
               "fieldId": "body",
-              "fieldValue": "={{ $json.body }}"
+              "fieldValue": "={{ $('Filter emails').last().json.body }}"
             }
           ]
         }
