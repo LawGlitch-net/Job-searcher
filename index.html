@@ -13,6 +13,49 @@
   />
 
   <link rel="stylesheet" href="index.css" />
+  
+  <!-- Minimal Inline CSS for 'View Job' Button & Responsiveness -->
+  <style>
+    /* Scope styling only to the .btn-view within the template structure */
+    .board #grid .card .card__foot .btn-view {
+      display: inline-block;
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 2px solid #555;
+      background-color: transparent;
+      color: #333;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .board #grid .card .card__foot .btn-view:hover:not(:disabled) {
+      background-color: #eee;
+      border-color: #333;
+    }
+
+    .board #grid .card .card__foot .btn-view:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Mobile-first approach or small screen overrides */
+    @media (max-width: 600px) {
+      .board #grid .card .card__foot {
+        flex-direction: column; /* Stack buttons vertically if too cramped */
+        gap: 10px;
+      }
+      
+      .board #grid .card .card__foot .btn-view,
+      .board #grid .card .card__foot .card__apply {
+        width: 100%; /* Make both buttons full-width */
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -50,8 +93,8 @@
       <p class="card__description"></p>
       <footer class="card__foot">
         <span class="card__badge"></span>
-        <button class="card__apply" type="button">Apply</button>
-        <a class="btn-view" target="_blank" rel="noopener noreferrer">View Job</a>
+          <button class="btn-view" type="button">View Job</button>
+          <button class="card__apply" type="button">Apply</button>
       </footer>
     </article>
   </template>
