@@ -95,56 +95,50 @@
     node.querySelector(".card__description").textContent = job.description || "No description available.";
     node.querySelector(".card__badge").textContent = statusLabel(status);
 
-    // Grab buttons
     const applyBtn = node.querySelector(".card__apply");
     const viewBtn = node.querySelector(".card__view");
     const ignoreBtn = node.querySelector(".card__ignore");
 
-    // -----------------------------------------------------
-    // Apply Button Logic
-    // -----------------------------------------------------
+    // --- 1. VIEW JOB BUTTON LOGIC (Opens link, no state/DB changes) ---
+    if (!job.url) {
+      if (viewBtn) viewBtn.disabled = true;
+    } else if (viewBtn) {
+      viewBtn.addEventListener("click", () => {
+        window.open(job.url, "_blank", "noopener,noreferrer");
+      });
+    }
+
+    // --- 2. APPLY BUTTON LOGIC ---
     if (status === "contacted") {
       applyBtn.textContent = "Applied";
       applyBtn.disabled = true;
     } else if (!job.url) {
       applyBtn.textContent = "No link";
       applyBtn.disabled = true;
+    } else if (status === "ignored" || status === "rejected") {
+      applyBtn.disabled = true;
     } else {
       applyBtn.addEventListener("click", () => handleApply(job, node, applyBtn));
     }
 
-    // Disable Apply if already ignored or rejected
-    if (status === "ignored" || status === "rejected") {
-      applyBtn.disabled = true;
-    }
-
-    // -----------------------------------------------------
-    // View Job Button Logic (Opens New Tab Safely)
-    // -----------------------------------------------------
-    if (!job.url) {
-      viewBtn.disabled = true;
-    } else {
-      viewBtn.addEventListener("click", () => {
-        window.open(job.url, "_blank", "noopener,noreferrer");
-      });
-    }
-
-    // -----------------------------------------------------
-    // Not Interested (Ignore) Button Logic
-    // -----------------------------------------------------
+    // --- 3. NOT INTERESTED BUTTON LOGIC ---
     if (status === "ignored") {
-      ignoreBtn.textContent = "Ignored";
-      ignoreBtn.disabled = true;
-    } else {
+      if (ignoreBtn) {
+        ignoreBtn.textContent = "Ignored";
+        ignoreBtn.disabled = true;
+      }
+    } else if (ignoreBtn) {
       ignoreBtn.addEventListener("click", () => handleIgnore(job, node, ignoreBtn));
     }
 
     return node;
   }
 
-  // Action: Apply
+  // Handle Apply Action
   async function handleApply(job, cardEl, buttonEl) {
-    window.open(job.url, "_blank", "noopener");
+    if (job.url) {
+      window.open(job.url, "_blank", "noopener");
+    }
 
     buttonEl.disabled = true;
     buttonEl.textContent = "Marking...";
@@ -166,19 +160,16 @@
     cardEl.dataset.status = "contacted";
     cardEl.querySelector(".card__badge").textContent = statusLabel("contacted");
     buttonEl.textContent = "Applied";
-    
-    const ignoreBtn = cardEl.querySelector(".card__ignore");
-    if(ignoreBtn) ignoreBtn.disabled = false; // Optional reset
 
     if (activeFilter !== "all" && activeFilter !== "contacted") {
       render();
     }
   }
 
-  // Action: Not Interested
+  // Handle Not Interested (Ignored) Action
   async function handleIgnore(job, cardEl, buttonEl) {
     buttonEl.disabled = true;
-    buttonEl.textContent = "Updating...";
+    buttonEl.textContent = "...";
 
     const { error } = await supabase
       .from("jobs_master")
@@ -197,17 +188,16 @@
     cardEl.dataset.status = "ignored";
     cardEl.querySelector(".card__badge").textContent = statusLabel("ignored");
     buttonEl.textContent = "Ignored";
-    
-    const applyBtn = cardEl.querySelector(".card__apply");
-    if(applyBtn) applyBtn.disabled = true;
 
-    // Remove from UI immediately if user is viewing a tab where this job no longer belongs
+    const applyBtn = cardEl.querySelector(".card__apply");
+    if (applyBtn) applyBtn.disabled = true;
+
     if (activeFilter !== "all" && activeFilter !== "ignored") {
       render();
     }
   }
 
-  // Tab Filtering
+  // Tab Filtering Event Listener
   tabs.addEventListener("click", (event) => {
     const btn = event.target.closest(".tab");
     if (!btn) return;
@@ -218,6 +208,5 @@
     render();
   });
 
-  // Initialize
   loadJobs();
 })();
