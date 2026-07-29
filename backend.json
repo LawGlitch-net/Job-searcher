@@ -10,8 +10,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -496,
-        -1024
+        -576,
+        -2096
       ],
       "id": "7725c83f-1b02-467f-b428-ae728fde6d39",
       "name": "Sticky Note"
@@ -26,8 +26,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -512,
-        384
+        -736,
+        912
       ],
       "id": "7cb4de92-bda1-4aaa-bff2-87862afbf24c",
       "name": "Sticky Note1"
@@ -42,8 +42,8 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -208,
-        -800
+        -288,
+        -1872
       ],
       "id": "c61b3966-2fc4-40ca-ae0f-ac828ee6493e",
       "name": "Telegram Trigger",
@@ -63,8 +63,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        0,
-        -800
+        -80,
+        -1872
       ],
       "id": "41bfc498-3df7-441d-ae85-f599b1a553f5",
       "name": "Create query"
@@ -97,8 +97,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        208,
-        -800
+        128,
+        -1872
       ],
       "id": "736ddd3d-7ee1-4f76-b4e1-cb11eb9525cf",
       "name": "If"
@@ -112,8 +112,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        352,
-        -656
+        272,
+        -1728
       ],
       "id": "3352344d-35b8-465b-ac7d-83c0f4f078ad",
       "name": "Send a text message",
@@ -140,8 +140,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        480,
-        -816
+        400,
+        -1888
       ],
       "id": "000dd5c3-9371-42d2-a303-b8a15e60f9f5",
       "name": "Enter search queries",
@@ -161,8 +161,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        848,
-        -592
+        768,
+        -1664
       ],
       "id": "38d67692-be85-494b-bec1-2457cb73ee9f",
       "name": "Loop/kill if no data arrived"
@@ -186,8 +186,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        672,
-        -816
+        592,
+        -1888
       ],
       "id": "bc5460a4-3be7-4750-9a23-c48b7ce163bf",
       "name": "Get extensions results",
@@ -231,8 +231,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1040,
-        -832
+        960,
+        -1904
       ],
       "id": "88a771df-8cf8-4d85-ad90-f48142748866",
       "name": "Mark as completed",
@@ -249,8 +249,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        992,
-        -592
+        912,
+        -1664
       ],
       "id": "69504934-1263-45c5-bd2a-4c90d1d3bfad",
       "name": "Wait",
@@ -286,8 +286,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        816,
-        -816
+        736,
+        -1888
       ],
       "id": "a5ba96a6-a2d9-46d8-afe8-b0197ada1fbf",
       "name": "If1",
@@ -300,8 +300,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1248,
-        -832
+        1168,
+        -1904
       ],
       "id": "141e720e-c188-4a14-b044-2795f790d265",
       "name": "Filter"
@@ -315,8 +315,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1424,
-        -832
+        1344,
+        -1904
       ],
       "id": "06e85a7d-a471-457b-860d-51192354f077",
       "name": "Get many rows",
@@ -358,8 +358,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1808,
-        -832
+        1728,
+        -1904
       ],
       "id": "55ae8ee8-11ac-4781-83e5-545a0f5b4bba",
       "name": "Update sheet",
@@ -379,8 +379,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        2016,
-        -832
+        1936,
+        -1904
       ],
       "id": "2f8366b2-bb65-4e1d-9f5e-b587b983d8b8",
       "name": "notify user",
@@ -399,8 +399,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1632,
-        -832
+        1552,
+        -1904
       ],
       "id": "2a610fa3-3b8d-49fb-8dd4-79da3868eea9",
       "name": "De duplicate"
@@ -419,8 +419,8 @@
       "type": "n8n-nodes-base.gmailTrigger",
       "typeVersion": 1.3,
       "position": [
-        -96,
-        528
+        -320,
+        1056
       ],
       "id": "cb9ade0c-410e-4193-a3b5-b6c5442146cc",
       "name": "Gmail Trigger",
@@ -441,8 +441,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -528,
-        1056
+        -752,
+        1584
       ],
       "id": "427702a3-1edf-4e73-a5d3-420ff26b286b",
       "name": "Sticky Note2"
@@ -454,8 +454,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        64,
-        528
+        -160,
+        1056
       ],
       "id": "d76eaeb7-d865-4700-a2cf-8227efd64e91",
       "name": "Filter emails"
@@ -469,8 +469,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        256,
-        528
+        32,
+        1056
       ],
       "id": "44356d55-48a6-4afe-b22b-fba4b743dfc3",
       "name": "Get many rows1",
@@ -508,8 +508,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        640,
-        528
+        416,
+        1056
       ],
       "id": "fea62f54-1984-46c6-9351-0d0a4bbef8f6",
       "name": "Update sheet1",
@@ -527,8 +527,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        464,
-        528
+        240,
+        1056
       ],
       "id": "c24632e8-72a6-497a-a708-cb2ee72a133a",
       "name": "De duplicate1"
@@ -547,8 +547,8 @@
       "type": "n8n-nodes-base.gmailTrigger",
       "typeVersion": 1.3,
       "position": [
-        -128,
-        1184
+        -352,
+        1712
       ],
       "id": "946a7b5b-31f6-45b6-b59d-29eded6d2e7e",
       "name": "Gmail Trigger1",
@@ -566,8 +566,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        32,
-        1184
+        -192,
+        1712
       ],
       "id": "b30faae4-24e1-4124-9097-6bfd089ca7f6",
       "name": "Filter emails1"
@@ -577,14 +577,14 @@
         "promptType": "define",
         "text": "={{ \"Here is an email I received:\\n\\nFrom: \" + $json.from + \"\\nSubject: \" + $json.subject + \"\\n\\n\" + ($json.text || $json.snippet) + \"\\n\\nWrite a professional reply on my behalf. If a CV/resume attachment is appropriate, include the exact tag [ATTACH_CV] somewhere in your reply.\" }}",
         "options": {
-          "systemMessage": "=You are a job applicant assistant. Here is the candidate's CV: {{ $json.CV }}\n\nWhen replying to job-related emails, write in a professional, concise tone. If the email is asking for a resume/CV, include the exact literal text [ATTACH_CV] anywhere in your response — this is a system marker, not something the recipient will see."
+          "systemMessage": "=You are an elite, highly professional AI Executive Assistant representing a top-tier candidate. Your primary goal is to draft polished, tailored, and exceptionally professional email replies on behalf of the candidate using their information: {{ $json.candidate }}\n\n### Core Directives\n\n1. **Tone & Persona**:\n   - Maintain a highly professional, polite, confident, and warm corporate tone.\n   - Write in grammatically flawless, business-appropriate English.\n   - Do NOT use generic, robotic, or overly eager templates. Every response must feel like it was personally composed by an experienced professional.\n\n2. **Structural Guidelines**:\n   - **Greeting**: Use a professional greeting (e.g., \"Hi [Name],\" or \"Dear [Name],\") referencing the sender's name when available.\n   - **Acknowledge**: Express genuine appreciation for the outreach and specific interest in the role and the company.\n   - **Value Alignment**: Briefly highlight 1 or 2 relevant achievements, technical skills, or experiences from the candidate's CV that directly match the core requirements of the job description or email context.\n   - **Call-to-Action**: End with a proactive, professional call-to-action (e.g., stating availability for a brief introductory call or virtual interview).\n\n3. **The CV Attachment Rule ([ATTACH_CV])**:\n   - If the sender explicitly requests a resume/CV, asks for more details about the candidate's background, or is an initial recruiter inquiry where submitting a resume is standard, you MUST append the exact, literal string `[ATTACH_CV]` on its own line at the very end of your response. \n   - *Example:*\n     \"Best regards,\\n[Candidate's Name]\\n\\n[ATTACH_CV]\"\n\n4. **Handling Information Gaps**:\n   - **Do Not Hallucinate**: Never invent, guess, or assume personal details, projects, job histories, or credentials that are not clearly documented in the candidate's CV.\n   - **Salary & Compensation Inquiries**: Address politely and professionally by keeping it open for negotiation (e.g., \"I am open to discussing compensation during an initial conversation to ensure we are fully aligned on the scope of the role\").\n   - **Notice Period & Availability Inquiries**: State that availability is flexible or standard, depending on mutual alignment (e.g., \"My availability/notice period is flexible, and I would be happy to discuss timeline expectations on our call\")."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        688,
-        1200
+        480,
+        1728
       ],
       "id": "c0b7cef5-859d-4d97-8e13-613d08e082f9",
       "name": "AI Agent"
@@ -597,8 +597,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        640,
-        1376
+        432,
+        1904
       ],
       "id": "c471fd66-8ef2-4d01-bdec-f3c14163e16e",
       "name": "Google Gemini Chat Model",
@@ -616,8 +616,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        240,
-        1184
+        32,
+        1712
       ],
       "id": "1f3927b6-62fd-421a-9f65-e4e60fe6bf0c",
       "name": "Loop Over Items"
@@ -626,13 +626,15 @@
       "parameters": {
         "chatId": "8374420796",
         "text": "={{ \"Processed \" + $('Filter emails1').all().length + \" job-related email(s) this run. Replies have been sent — check your Sent folder.\" }}",
-        "additionalFields": {}
+        "additionalFields": {
+          "appendAttribution": true
+        }
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        496,
-        1008
+        288,
+        1536
       ],
       "id": "e609452e-7731-4ca6-90bd-90698a25c0f7",
       "name": "Notify user",
@@ -646,17 +648,26 @@
     },
     {
       "parameters": {
-        "sendTo": "={{ $json.to }}",
-        "subject": "={{ $json.subject }}",
+        "operation": "reply",
+        "messageId": "={{ $('email formting').first().json.messageId }}",
         "emailType": "text",
         "message": "={{ $json.body }}",
-        "options": {}
+        "options": {
+          "appendAttribution": false,
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {
+                "property": "={{ $json.binary.data }}"
+              }
+            ]
+          }
+        }
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        1136,
-        1200
+        1632,
+        1744
       ],
       "id": "1c47fadd-e2ae-421d-8ff5-e100d66eac87",
       "name": "Reply",
@@ -670,13 +681,13 @@
     },
     {
       "parameters": {
-        "jsCode": "// parse the ai output also find if he ai wants to attach any attachments like our cv or other documents that we gave access to it if yes attach them to the email specifically where it demanded\n\nconst aiOutput = $input.first().json.output || $input.first().json.text || '';\n\nconst wantsCV = /\\[ATTACH_CV\\]/i.test(aiOutput);\nconst cleanBody = aiOutput.replace(/\\[ATTACH_CV\\]/gi, '').trim();\n\nconst originalEmail = $('Filter emails1').item.json;\n\nreturn [{\n  json: {\n    to: originalEmail.from,\n    subject: `Re: ${originalEmail.subject || ''}`,\n    body: cleanBody,\n    attachCV: wantsCV\n  }\n}];"
+        "jsCode": "// parse the ai output also find if he ai wants to attach any attachments like our cv or other documents that we gave access to it if yes attach them to the email specifically where it demanded\n\n// 1. Extract raw output from the AI Agent\nconst aiOutput = $input.first().json.output || $input.first().json.text || '';\n\nlet originalEmail = {};\ntry {\n  originalEmail = $('Filter emails1').item.json;\n} catch (e) {\n  originalEmail = $('Filter emails1').first().json;\n}\n\n// 2. Extract Document Content for PDF Generation\nconst pdfRegex = /<GENERATE_PDF>([\\s\\S]*?)<\\/GENERATE_PDF>/i;\nconst pdfMatch = aiOutput.match(pdfRegex);\n\nlet documentText = \"\";\nlet needsPdfGenerated = false;\n\nif (pdfMatch && pdfMatch[1]) {\n    documentText = pdfMatch[1].trim();\n    needsPdfGenerated = true;\n}\n\n// 3. Clean the email body (remove the tags and document text from the email)\nlet cleanBody = aiOutput.replace(pdfRegex, '').trim();\n\n// 4. Format Subject\nlet subject = originalEmail.subject || 'Application Update';\nif (!/^re:/i.test(subject.trim())) {\n    subject = `Re: ${subject}`;\n}\n\n// 5. Output structured JSON\nreturn {\n  json: {\n    emailData: {\n      to: originalEmail.from,\n      subject: subject,\n      body: cleanBody,\n      threadId: originalEmail.threadId || '',\n      messageId: originalEmail.messageId || ''\n    },\n    actions: {\n      generatePDF: needsPdfGenerated\n    },\n    document: {\n      text: documentText\n    }\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        976,
-        1200
+        768,
+        1728
       ],
       "id": "97752bc8-b8e4-46d2-b0a8-011eb34fe9d8",
       "name": "email formting"
@@ -687,8 +698,14 @@
           "assignments": [
             {
               "id": "fa26de20-88de-4ffb-b4b7-4418e5b52570",
-              "name": "CV",
+              "name": "candidate",
               "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "f2039ad1-4354-460a-8ec3-689e2983495c",
+              "name": "CV",
+              "value": "",
               "type": "string"
             }
           ]
@@ -699,8 +716,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        480,
-        1200
+        272,
+        1728
       ],
       "id": "8bf01a33-6cd7-4402-bc6f-e661433be3bf",
       "name": "documents"
@@ -729,44 +746,21 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -608,
-        -304
+        -704,
+        -1088
       ],
       "id": "8d37d464-935f-45fa-93db-40a89da57acf",
       "name": "Sticky Note4"
     },
     {
       "parameters": {
-        "updates": [
-          "message"
-        ],
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegramTrigger",
-      "typeVersion": 1.2,
-      "position": [
-        -240,
-        -208
-      ],
-      "id": "31018080-f02a-4a05-b474-449f4089ec7f",
-      "name": "Telegram Trigger1",
-      "webhookId": "dda33ae9-25e4-4281-8449-01d917f7f3e7",
-      "credentials": {
-        "telegramApi": {
-          "id": "sLizcZ3DHrn0B2G4",
-          "name": "Telegram account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "// Parses the user's raw Telegram message into structured search parameters.\n// Expected free-text examples:\n//   \"backend developer in Bengaluru\"\n//   \"remote data analyst on indeed after:2026-07-01\"\n//   \"site:naukri.com product manager in Mumbai\"\n\n// if the format is not correct give the user the correct format in chat\n\nconst message = ($input.first().json.message && $input.first().json.message.text) || '';\nconst chatId = $input.first().json.message.chat.id;\n\n// 1. Format Validation: Check if the message is empty or doesn't contain a basic colon separator for filters\nif (!message.trim() || !message.includes(':')) {\n  const helpText = `⚠️ *Invalid Format* ⚠️\\n\\nPlease submit your job search using explicit key-value pairs separated by colons.\\n\\n*Example Format:*\\nrole: Backend Developer\\nlocation: Bengaluru\\nsite: linkedin.com\\n\\n*Available labels:* role, location, company, site, exclude, after, before, type, level`;\n  \n  return { \n    json: { \n      format: \"invalid\", \n      validformat: helpText, \n      chatId, \n      rawMessage: message \n    } \n  };\n}\n\nconst labelMap = {\n  role: ['role', 'title', 'job', 'position', 'keywords'],\n  location: ['location', 'city'],\n  company: ['company', 'employer'],\n  site: ['site', 'platform', 'board'],\n  exclude: ['exclude', 'not', 'without'],\n  after: ['after', 'since', 'posted after'],\n  before: ['before', 'until', 'posted before'],\n  type: ['type', 'employment', 'employment type'],\n  level: ['level', 'seniority', 'experience']\n};\n\nconst labelLookup = {};\nfor (const [key, words] of Object.entries(labelMap)) {\n  for (const w of words) labelLookup[w.toLowerCase()] = key];\n}\n\nconst filters = { role: [], location: [], company: [], site: [], exclude: [], after: '', before: '', type: [], level: [] };\n\nconst clauses = message.split(/[,\\n]/).map(c => c.trim()).filter(Boolean);\n\nfor (const clause of clauses) {\n  const m = clause.match(/^([a-zA-Z ]+?)\\s*:\\s*(.+)$/);\n  if (m) {\n    const key = labelLookup[m[1].trim().toLowerCase()];\n    if (key) {\n      if (key === 'after' || key === 'before') filters[key] = m[2].trim();\n      else filters[key].push(m[2].trim());\n      continue;\n    }\n  }\n  filters.role.push(clause); // unlabeled text -> treated as keywords\n}\n\nconst remoteMatch = message.match(/\\b(remote|hybrid|on-?site|work from home|wfh)\\b/i);\nconst workMode = remoteMatch ? remoteMatch[1].toLowerCase() : '';\n\nconst parts = [];\n\nif (filters.site.length) {\n  const flat = filters.site.join(' ').split(/\\s+/);\n  const siteTerms = flat.map(s => `site:${s.replace(/^https?:\\/\\//, '').replace(/\\/$/, '')}`);\n  parts.push(siteTerms.length > 1 ? `(${siteTerms.join(' OR ')})` : siteTerms[0]);\n} else {\n  const defaultSites = ['linkedin.com/jobs', 'indeed.com', 'naukri.com', 'glassdoor.com', 'weworkremotely.com'];\n  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);\n  parts.push(`site:${defaultSites[dayOfYear % defaultSites.length]}`);\n}\n\nconst roleText = filters.role.join(' ').trim();\nif (roleText) parts.push(`\"${roleText}\"`);\nif (filters.company.length) parts.push(`\"${filters.company.join(' ')}\"`);\nif (filters.location.length) parts.push(filters.location.join(' '));\nif (filters.type.length) parts.push(`\"${filters.type.join(' ')}\"`);\nif (filters.level.length) parts.push(`\"${filters.level.join(' ')}\"`);\nif (workMode) parts.push(workMode);\n\nfor (const ex of filters.exclude) {\n  ex.split(/\\s+/).forEach(word => parts.push(`-${word}`));\n}\n\nlet after = filters.after;\nif (!after) {\n  const d = new Date();\n  d.setDate(d.getDate() - 7);\n  after = d.toISOString().split('T')[0];\n}\nparts.push(`after:${after}`);\nif (filters.before) parts.push(`before:${filters.before}`);\n\nconst searchQuery = parts.join(' ').replace(/\\s+/g, ' ').trim();\n\n// 2. Format Validated Successfully: Return the query with format \"ok\"\nreturn { \n  json: { \n    format: \"ok\", \n    searchQuery, \n    chatId, \n    rawMessage: message \n  } \n};"
+        "jsCode": "// Parses the user's raw chat message into structured, high-quality Google search parameters.\n\nconst message = $input.first().json.chatInput || '';\nconst chatId = $input.first().json.sessionId;\n\nif (!message.trim() || !message.includes(':')) {\n  const helpText = `⚠️ *Invalid Format* ⚠️\\n\\nPlease submit your job search using explicit key-value pairs separated by colons.\\n\\n*Example Format:*\\n\\nrole: business operations OR revenue operations OR AI automation\\n\\nlocation: remote OR New York\\n\\nsite: linkedin.com, weworkremotely.com, indeed.com\\n\\nexclude: insurance, sales, target\\n\\ntype: full-time\\n\\nafter: 2026-07-20`;\n\n  return {\n    json: {\n      format: \"invalid\",\n      validformat: helpText,\n      chatId,\n      rawMessage: message\n    }\n  };\n}\n\nconst labelMap = {\n  role: ['role', 'title', 'job', 'position', 'keywords'],\n  location: ['location', 'city', 'country', 'place', 'region'],\n  company: ['company', 'employer'],\n  site: ['site', 'platform', 'board'],\n  exclude: ['exclude', 'not', 'without'],\n  after: ['after', 'since', 'posted after'],\n  before: ['before', 'until', 'posted before'],\n  type: ['type', 'employment', 'employment type'],\n  level: ['level', 'seniority', 'experience']\n};\n\nconst labelLookup = {};\nconst allLabelWords = [];\nfor (const [key, words] of Object.entries(labelMap)) {\n  for (const w of words) {\n    labelLookup[w.toLowerCase()] = key;\n    allLabelWords.push(w);\n  }\n}\n\n// Build a regex that finds every \"label:\" occurrence anywhere in the message,\n// sorted longest-first so multi-word labels (e.g. \"posted after\") match before \"after\"\nconst sortedLabels = [...allLabelWords].sort((a, b) => b.length - a.length);\nconst labelPattern = sortedLabels.map(l => l.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')).join('|');\nconst splitRegex = new RegExp(`(?:^|[,\\\\n]|(?<=\\\\s))(${labelPattern})\\\\s*:`, 'gi');\n\nconst filters = { role: [], location: [], company: [], site: [], exclude: [], after: '', before: '', type: [], level: [] };\n\n// Find all label positions in the raw message\nconst matches = [...message.matchAll(splitRegex)];\n\nif (matches.length === 0) {\n  filters.role.push(message.trim());\n} else {\n  for (let i = 0; i < matches.length; i++) {\n    const label = matches[i][1].toLowerCase();\n    const key = labelLookup[label];\n    if (!key) continue;\n\n    const valueStart = matches[i].index + matches[i][0].length;\n    const valueEnd = i + 1 < matches.length ? matches[i + 1].index : message.length;\n    let value = message.slice(valueStart, valueEnd).trim();\n    value = value.replace(/[,\\n]+$/, '').trim(); // strip trailing separator\n\n    if (!value) continue;\n\n    if (key === 'after' || key === 'before') {\n      filters[key] = value.split(/[,\\n]/)[0].trim();\n    } else {\n      // split on commas within this field's value (e.g. multiple sites/excludes)\n      value.split(',').map(v => v.trim()).filter(Boolean).forEach(v => filters[key].push(v));\n    }\n  }\n}\n\nconst remoteMatch = message.match(/\\b(remote|hybrid|on-?site|work from home|wfh)\\b/i);\nconst workMode = remoteMatch ? remoteMatch[1].toLowerCase() : '';\n\nconst knownSitePaths = {\n  'linkedin.com': 'linkedin.com/jobs',\n  'indeed.com': 'indeed.com/viewjob',\n  'naukri.com': 'naukri.com/job-listings',\n  'glassdoor.com': 'glassdoor.com/job-listing',\n  'weworkremotely.com': 'weworkremotely.com/remote-jobs',\n  'remote.co': 'remote.co/remote-jobs',\n  'flexjobs.com': 'flexjobs.com/jobs',\n  'wellfound.com': 'wellfound.com/jobs',\n  'monster.com': 'monster.com/jobs',\n  'ziprecruiter.com': 'ziprecruiter.com/jobs',\n  'shine.com': 'shine.com/jobs',\n  'instahyre.com': 'instahyre.com/job'\n};\n\nfunction resolveSitePath(rawSite) {\n  const clean = rawSite.replace(/^https?:\\/\\//, '').replace(/\\/$/, '').toLowerCase();\n  for (const domain of Object.keys(knownSitePaths)) {\n    if (clean === domain || clean === `www.${domain}`) return knownSitePaths[domain];\n  }\n  return clean;\n}\n\nconst parts = [];\n\nif (filters.site.length) {\n  const siteTerms = filters.site.map(s => `site:${resolveSitePath(s)}`);\n  parts.push(siteTerms.length > 1 ? `(${siteTerms.join(' OR ')})` : siteTerms[0]);\n} else {\n  const defaultSites = ['linkedin.com/jobs', 'indeed.com/viewjob', 'naukri.com/job-listings', 'glassdoor.com/job-listing', 'weworkremotely.com/remote-jobs'];\n  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);\n  parts.push(`site:${defaultSites[dayOfYear % defaultSites.length]}`);\n}\n\nfunction buildRoleQuery(roleFilters) {\n  const roleText = roleFilters.join(' ').trim();\n  if (!roleText) return '';\n\n  if (/\\bOR\\b/i.test(roleText)) {\n    const phrases = roleText.split(/\\bOR\\b/i).map(p => p.trim()).filter(Boolean);\n    return `(${phrases.map(p => `\"${p}\"`).join(' OR ')})`;\n  }\n  if (/\\bAND\\b/i.test(roleText)) {\n    const phrases = roleText.split(/\\bAND\\b/i).map(p => p.trim()).filter(Boolean);\n    return phrases.map(p => `\"${p}\"`).join(' ');\n  }\n  return `\"${roleText}\"`;\n}\n\nfunction buildLocationQuery(locFilters) {\n  const locText = locFilters.join(' ').trim();\n  if (!locText) return '';\n\n  if (/\\bOR\\b/i.test(locText)) {\n    const locations = locText.split(/\\bOR\\b/i).map(l => l.trim()).filter(Boolean);\n    return `(${locations.map(l => `\"${l}\"`).join(' OR ')})`;\n  }\n  if (/\\bAND\\b/i.test(locText)) {\n    const locations = locText.split(/\\bAND\\b/i).map(l => l.trim()).filter(Boolean);\n    return locations.map(l => `\"${l}\"`).join(' ');\n  }\n  return `\"${locText}\"`;\n}\n\nconst roleQuery = buildRoleQuery(filters.role);\nif (roleQuery) parts.push(roleQuery);\n\nconst locationQuery = buildLocationQuery(filters.location);\nif (locationQuery) parts.push(locationQuery);\n\nif (filters.company.length) parts.push(`\"${filters.company.join(' ')}\"`);\nif (filters.type.length) parts.push(`\"${filters.type.join(' ')}\"`);\nif (filters.level.length) parts.push(`\"${filters.level.join(' ')}\"`);\nif (workMode && !locationQuery.toLowerCase().includes(workMode)) parts.push(workMode);\n\nconst defaultExcludeWords = ['reactions', 'posts'];\nconst userExcludeWords = filters.exclude.flatMap(ex => ex.split(/\\s+/).filter(Boolean));\nconst allExcludes = [...new Set([...userExcludeWords, ...defaultExcludeWords])];\nallExcludes.forEach(word => parts.push(`-${word}`));\n\nlet after = filters.after;\nif (!after) {\n  const d = new Date();\n  d.setDate(d.getDate() - 7);\n  after = d.toISOString().split('T')[0];\n}\nparts.push(`after:${after}`);\nif (filters.before) parts.push(`before:${filters.before}`);\n\nconst searchQuery = parts.join(' ').replace(/\\s+/g, ' ').trim();\n\nreturn {\n  json: {\n    format: \"ok\",\n    searchQuery,\n    chatId,\n    rawMessage: message\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -32,
-        -208
+        -128,
+        -992
       ],
       "id": "01ae62a3-51e4-4e4d-b409-3c049e5cc770",
       "name": "Create search query"
@@ -780,11 +774,12 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1536,
-        -176
+        1632,
+        -960
       ],
       "id": "cbf44caa-45a7-48c4-8e18-4130b3695f8e",
       "name": "Get many rows2",
+      "alwaysOutputData": true,
       "credentials": {
         "supabaseApi": {
           "id": "DMpg1eHlqOAdF1iM",
@@ -794,16 +789,17 @@
     },
     {
       "parameters": {
-        "jsCode": "// Deduplicate newly-found jobs against records already stored in Supabase\n\nconst newJobs = $('Extract Results6').all().map(i => i.json);\nconst existingJobs = $input.all().map(i => i.json);\n\nconst existingKeys = new Set(\n  existingJobs.map(job => (job.url || `${job.title}-${job.company}`).toLowerCase().trim())\n);\n\nconst uniqueJobs = newJobs.filter(job => {\n  const key = (job.url || `${job.title}-${job.company}`).toLowerCase().trim();\n  return !existingKeys.has(key);\n});\n\nreturn uniqueJobs.map(job => ({ json: job }));"
+        "jsCode": "// Deduplicate newly-found jobs against records already stored in Supabase\n// and record how many are genuinely new, for the headcount reported later.\n\nconst newJobs = $('Extract Results6').all().map(i => i.json);\nconst existingJobs = $input.all().map(i => i.json);\n\nconst existingKeys = new Set(\n  existingJobs.map(job => (job.url || `${job.title}-${job.company}`).toLowerCase().trim())\n);\n\nconst uniqueJobs = newJobs.filter(job => {\n  const key = (job.url || `${job.title}-${job.company}`).toLowerCase().trim();\n  return !existingKeys.has(key);\n});\n\nconst staticData = $getWorkflowStaticData('global');\nstaticData.newJobsThisRun = (staticData.newJobsThisRun || []).concat(uniqueJobs);\n\nreturn uniqueJobs.map(job => ({ json: job }));"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1744,
-        -176
+        1840,
+        -960
       ],
       "id": "4e0f7ac8-ca30-4bcf-a67c-bd5de62b1889",
-      "name": "De duplicate2"
+      "name": "De duplicate2",
+      "alwaysOutputData": false
     },
     {
       "parameters": {
@@ -836,37 +832,16 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1920,
-        -176
+        2016,
+        -960
       ],
       "id": "8ad05082-6804-4025-b4ff-e3d4490f1dcc",
       "name": "Update sheet2",
+      "alwaysOutputData": true,
       "credentials": {
         "supabaseApi": {
           "id": "DMpg1eHlqOAdF1iM",
           "name": "Supabase account 3"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "chatId": "={{ $json.chatId }}",
-        "text": "={{ $json.totalNewJobs }} new job(s) found.\nGo to https://lawglitch-net.github.io/Job-searcher/ to apply.",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        2512,
-        -160
-      ],
-      "id": "1cec4f73-f071-459c-a7b6-a9e2c6b8f99c",
-      "name": "Send a text message1",
-      "webhookId": "12c1f8d4-8466-47e3-bf4d-417a977b4ce9",
-      "credentials": {
-        "telegramApi": {
-          "id": "sLizcZ3DHrn0B2G4",
-          "name": "Telegram account 2"
         }
       }
     },
@@ -905,8 +880,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        880,
-        -112
+        992,
+        -896
       ],
       "id": "47a5a3b4-0a59-4cb0-8daf-a06db563c077",
       "name": "Search Google6"
@@ -918,21 +893,22 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1328,
-        -176
+        1440,
+        -960
       ],
       "id": "b64d7135-9271-4ca3-9791-2faf1296c961",
-      "name": "Extract Results6"
+      "name": "Extract Results6",
+      "alwaysOutputData": true
     },
     {
       "parameters": {
-        "jsCode": "// Decides whether to fetch another page of Google results, and keeps a\n// running total of newly-inserted jobs across all pagination iterations\n// (n8n's per-run node outputs don't accumulate on their own, so we use\n// workflow static data as a small persistent counter for this execution).\n\nconst maxPages = 10;\nconst currentPage = $runIndex + 1;\n\nconst staticData = $getWorkflowStaticData('node');\nif ($runIndex === 0) staticData.totalNewJobs = 0;\nstaticData.totalNewJobs += $input.all().length;\n\n// Stop early if the last Google page returned no results at all,\n// so we don't burn API quota paging through an exhausted result set\nconst lastSearchItems = ($('Search Google6').first().json || {}).items;\nconst noMoreResults = !lastSearchItems || lastSearchItems.length === 0;\n\nreturn {\n  json: {\n    continueLoop: currentPage < maxPages && !noMoreResults,\n    startIndex: (currentPage * 10) + 1,\n    totalNewJobs: staticData.totalNewJobs,\n    chatId: $('Config1').first().json.chatId\n  }\n};"
+        "jsCode": "// Decides whether to fetch another page of Google results, and keeps a\n// running total of newly-inserted (deduplicated) jobs across all\n// pagination iterations.\n\nconst maxPages = 10;\nconst currentPage = $runIndex + 1;\n\nconst staticData = $getWorkflowStaticData('global');\nconst totalNewJobs = (staticData.newJobsThisRun || []).length;\n\nconst lastSearchItems = ($('Search Google6').first().json || {}).items;\nconst noMoreResults = !lastSearchItems || lastSearchItems.length === 0;\n\nreturn {\n  json: {\n    continueLoop: currentPage < maxPages && !noMoreResults,\n    startIndex: (currentPage * 10) + 1,\n    totalNewJobs,\n    chatId: $('Config1').first().json.chatId\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2096,
-        -176
+        2192,
+        -960
       ],
       "id": "0244c5f0-8d70-4044-8fbf-0b43752dd251",
       "name": "Pagination6"
@@ -965,8 +941,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2272,
-        -176
+        2368,
+        -960
       ],
       "id": "ea6ce8df-5e96-4af3-9a1f-8516473e3410",
       "name": "Pagination Check6"
@@ -1012,8 +988,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        400,
-        -224
+        512,
+        -1008
       ],
       "id": "6105768a-db9e-401f-8de7-d9638cbd4f4b",
       "name": "Config1"
@@ -1035,8 +1011,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        384,
-        80
+        496,
+        -704
       ],
       "id": "c913c532-bb14-4679-b2ad-50fac139f538",
       "name": "Config2"
@@ -1069,65 +1045,21 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        160,
-        -208
+        64,
+        -992
       ],
       "id": "b08c8597-2169-4628-afb0-c2ed56bc8d80",
       "name": "If2"
     },
     {
       "parameters": {
-        "chatId": "={{ $('Telegram Trigger1').item.json.message.chat.id }}",
-        "text": "={{ $json.validformat }}",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        144,
-        -32
-      ],
-      "id": "99299317-dba5-4d55-a1ef-95394ef3b7e9",
-      "name": "Send a text message2",
-      "webhookId": "9aea2f33-8af9-4012-9cc7-21ae909562bf",
-      "credentials": {
-        "telegramApi": {
-          "id": "sLizcZ3DHrn0B2G4",
-          "name": "Telegram account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "chatId": "={{ $json.chatId }}",
-        "text": "={{ $json.totalNewJobs }} new job(s) found. {{ $json.text }}\nGo to https://lawglitch-net.github.io/Job-searcher/ to apply.",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        1520,
-        96
-      ],
-      "id": "fe90e2d4-147b-4e8f-900a-f87de984dce1",
-      "name": "Send a text message3",
-      "webhookId": "12c1f8d4-8466-47e3-bf4d-417a977b4ce9",
-      "credentials": {
-        "telegramApi": {
-          "id": "sLizcZ3DHrn0B2G4",
-          "name": "Telegram account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "// end the search and notify the user on how many jobs were found\n\nconst staticData = $getWorkflowStaticData('node');\nconst totalNewJobs = staticData.totalNewJobs || 0;\nconst chatId = $('Config1').first().json.chatId;\n\nlet text;\nif (totalNewJobs === 0) {\n  text = 'Try loosening your search — broaden the location, drop an exclusion, or remove the date filter to broaden the search.';\n} else {\n  text = `${totalNewJobs} new job${totalNewJobs === 1 ? '' : 's'} found.\\nGo to https://lawglitch-net.github.io/Job-searcher/ to apply.`;\n}\n\nreturn { json: { chatId, text, totalNewJobs } };"
+        "jsCode": "// End the search and notify the user how many jobs were found\n\nconst staticData = $getWorkflowStaticData('global');\nconst totalNewJobs = (staticData.newJobsThisRun || []).length;\nconst chatId = $('Config1').first().json.chatId;\n\nlet text;\nif (totalNewJobs === 0) {\n  text = 'Try loosening your search — broaden the location, drop an exclusion, or remove the date filter to broaden the search.';\n} else {\n  text = `${totalNewJobs} new job${totalNewJobs === 1 ? '' : 's'} found.\\nGo to https://lawglitch-net.github.io/Job-searcher/ to apply.`;\n}\n\nreturn { json: { chatId, text, totalNewJobs } };"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1344,
-        96
+        1440,
+        -688
       ],
       "id": "55bdfa88-03ea-4bf6-9833-9f5d0b9c8555",
       "name": "No results"
@@ -1160,11 +1092,472 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1056,
-        -112
+        1168,
+        -896
       ],
       "id": "bd5f6078-aff1-4ef7-8ca1-5ffdf36a6351",
       "name": "results exists?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d0b554cf-d379-4dd9-bf6d-e3ba629fbe99",
+              "leftValue": "={{ $json.actions.generatePDF }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        992,
+        1728
+      ],
+      "id": "ac2e6aae-dd7e-409c-9bc9-9e9de117e0a3",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "rtf",
+        "binaryPropertyName": "=data",
+        "options": {
+          "fileName": "={{ $('email formting').first().json.fileName }}"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1264,
+        1600
+      ],
+      "id": "5db8f5ac-c210-42a3-ad9c-b63454192662",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a9ad696b-7b18-468e-87e2-f180b644384d",
+              "name": "to",
+              "value": "={{ $('email formting').first().json.to }}",
+              "type": "string"
+            },
+            {
+              "id": "1cdc6aba-567a-4970-9567-a93ce9d99f14",
+              "name": "body",
+              "value": "={{ $('email formting').first().json.body }}",
+              "type": "string"
+            },
+            {
+              "id": "31da3130-8be0-4a5e-a2f1-32276997766b",
+              "name": "data",
+              "value": "={{ $json.binary.data }}",
+              "type": "binary"
+            },
+            {
+              "id": "75f2758d-4025-4c20-b9c1-c43e40b120d1",
+              "name": "subject",
+              "value": "={{ $('email formting').first().json.subject }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        1600
+      ],
+      "id": "45f4735f-91d3-46f7-933d-6d4439d5f1c1",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "70877232-3db6-4793-bf52-33760e68c851",
+              "name": "data",
+              "value": "={{ $('email formting').first().json.documentText }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        1600
+      ],
+      "id": "92a43cb7-4a01-4464-9eef-62ce3d0bf02d",
+      "name": "convert files"
+    },
+    {
+      "parameters": {
+        "content": "# user onboarding pipeline [will attach to the main workflow later]",
+        "width": 432,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -736,
+        -256
+      ],
+      "id": "928f216a-d991-4930-a827-f236f4a10a60",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.chat.id }}",
+        "message": "=Hello there welcome to Job hunter, it seems you are new in this chat why dont you tell me more about yourself so we can get started on creating your profile. tell me the following in order\nName\nAge\ngender\njobs looking for",
+        "responseType": "freeText",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        -240
+      ],
+      "id": "231725c1-ab56-43a1-a047-4d3e24285e34",
+      "name": "Get basic info",
+      "webhookId": "dedcda2a-6941-48cc-90ab-6dbf17929430",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.chat.id }}",
+        "text": "={{ $json.validformat }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1424,
+        -128
+      ],
+      "id": "b6b8a8fb-61a4-4529-bf1a-6d4e72ce7332",
+      "name": "Send a text message4",
+      "webhookId": "9aea2f33-8af9-4012-9cc7-21ae909562bf",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d7468072-bbd1-4571-921e-6c8c45a31a3a",
+              "leftValue": "={{ $json.format }}",
+              "rightValue": "ok",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1232,
+        -240
+      ],
+      "id": "f87db3a8-6b5a-4ffb-bcc5-0157f9c0fd88",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// parses all the telegram nodes data and make a profile along with all the incoming data from the check chatID node for files converted into text for storing in database. if the format is incorrect then advises users to use correct format."
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        -240
+      ],
+      "id": "f6c44302-73ac-4177-8c8e-3f13d3cf67ed",
+      "name": "Format check"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "jrhJzKfARHJn832I",
+          "mode": "list",
+          "cachedResultName": "Job-hunter",
+          "cachedResultUrl": "/projects/G447CbPCsDXEPiDo/datatables/jrhJzKfARHJn832I"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "optimizeBulk": true
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1440,
+        -336
+      ],
+      "id": "fd7ad25d-5119-41c9-b278-855ab426861a",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "jrhJzKfARHJn832I",
+          "mode": "list",
+          "cachedResultName": "Job-hunter",
+          "cachedResultUrl": "/projects/G447CbPCsDXEPiDo/datatables/jrhJzKfARHJn832I"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -192,
+        -256
+      ],
+      "id": "f1fe3e60-6f84-4701-a429-be20b95efa68",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "jsCode": "// if the telegram chatid is new and didnt existed before in database pass the data to the onboarding system. also converts any attached files into text formats"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -256
+      ],
+      "id": "9e674961-b4ee-4386-8e78-59192fa9493f",
+      "name": "check chatID"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8bb92754-1bb2-42a0-802d-5214241de41b",
+              "leftValue": "={{ $json.chatid }}",
+              "rightValue": "exists",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        160,
+        -256
+      ],
+      "id": "ee4d4f1f-cbbe-4919-b9eb-b3309964205a",
+      "name": "If5"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.chat.id }}",
+        "message": "=Hello there welcome to Job hunter, it seems you are new in this chat why dont you tell me more about yourself so we can get started on creating your profile. tell me the following in order\nName\nAge\ngender\njobs looking for",
+        "responseType": "freeText",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        -240
+      ],
+      "id": "a8b4cb54-9c8a-40f7-8e01-c0abab523877",
+      "name": "Get basic info1",
+      "webhookId": "dedcda2a-6941-48cc-90ab-6dbf17929430",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.chat.id }}",
+        "message": "=Hello there welcome to Job hunter, it seems you are new in this chat why dont you tell me more about yourself so we can get started on creating your profile. tell me the following in order\nName\nAge\ngender\njobs looking for",
+        "responseType": "freeText",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        816,
+        -240
+      ],
+      "id": "b6748fe7-0a3b-46dd-b95a-332554f77bae",
+      "name": "Get basic info2",
+      "webhookId": "dedcda2a-6941-48cc-90ab-6dbf17929430",
+      "credentials": {
+        "telegramApi": {
+          "id": "sLizcZ3DHrn0B2G4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {
+          "responseMode": "responseNodes"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -336,
+        -992
+      ],
+      "id": "23f308d9-c862-4920-8311-c860addf5f9f",
+      "name": "When chat message received",
+      "webhookId": "ef4331d7-7291-48b5-825a-b9d86d086b35"
+    },
+    {
+      "parameters": {
+        "message": "={{ $json.validformat }}",
+        "waitUserReply": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1,
+      "position": [
+        48,
+        -768
+      ],
+      "id": "4693a7aa-892e-4695-ba41-36ecb029da6e",
+      "name": "Respond to Chat"
+    },
+    {
+      "parameters": {
+        "message": "={{ $json.totalNewJobs }} found\n{{ $json.links }}",
+        "waitUserReply": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1,
+      "position": [
+        1856,
+        -688
+      ],
+      "id": "2bae1a50-2be4-42c0-9bcb-3fea194622a7",
+      "name": "Respond to Chat2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Converts job records into a readable table-style text message for Telegram,\n// and reports the total headcount of new jobs found this run.\n\nconst staticData = $getWorkflowStaticData('global');\nconst totalNewJobs = (staticData.newJobsThisRun || []).length;\nconst chatId = $('Config1').first().json.chatId;\n\nif (totalNewJobs === 0) {\n  return {\n    json: {\n      chatId,\n      totalNewJobs: 0,\n      links: 'No new jobs found this run. Try broadening your search — different location, fewer exclusions, or wider date range.'\n    }\n  };\n}\n\nconst jobs = staticData.newJobsThisRun;\n\nconst lines = jobs.map((job, idx) => {\n  const title = job.title || 'N/A';\n  const company = job.company || 'N/A';\n  const description = (job.description || '').slice(0, 120).trim();\n  const link = job.url || '';\n\n  return `*${idx + 1}. ${title}*\\n🏢 ${company}\\n📝 ${description}${description.length === 120 ? '...' : ''}\\n🔗 ${link}\\n`;\n});\n\nconst links = lines.join('\\n');\n\nreturn { json: { chatId, totalNewJobs, links } };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        -688
+      ],
+      "id": "13ae60d6-645b-4d9a-a468-4fca8a19adef",
+      "name": "structure"
+    },
+    {
+      "parameters": {
+        "message": "={{ $json.searchQuery }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1,
+      "position": [
+        896,
+        -1120
+      ],
+      "id": "53f5fb0c-3195-481c-9a44-08d4d1e79807",
+      "name": "debugging experiment"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Reset the shared new-jobs accumulator for this fresh search run\nconst staticData = $getWorkflowStaticData('global');\nstaticData.newJobsThisRun = [];\n\nreturn {\n  json: {\n    searchQuery: $json.searchQuery,\n    maxPages: 10,\n    currentPage: 1,\n    currentStartIndex: 1,\n    chatId: $json.chatId\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        -1008
+      ],
+      "id": "afe201b7-1eea-40a6-abf5-11385f6fcef5",
+      "name": "synthesize"
     }
   ],
   "connections": {
@@ -1446,7 +1839,7 @@
       "main": [
         [
           {
-            "node": "Reply",
+            "node": "If3",
             "type": "main",
             "index": 0
           }
@@ -1458,17 +1851,6 @@
         [
           {
             "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Telegram Trigger1": {
-      "main": [
-        [
-          {
-            "node": "Create search query",
             "type": "main",
             "index": 0
           }
@@ -1563,7 +1945,7 @@
         ],
         [
           {
-            "node": "Send a text message1",
+            "node": "structure",
             "type": "main",
             "index": 0
           }
@@ -1596,14 +1978,14 @@
       "main": [
         [
           {
-            "node": "Config1",
+            "node": "synthesize",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Send a text message2",
+            "node": "Respond to Chat",
             "type": "main",
             "index": 0
           }
@@ -1614,7 +1996,7 @@
       "main": [
         [
           {
-            "node": "Send a text message3",
+            "node": "structure",
             "type": "main",
             "index": 0
           }
@@ -1633,6 +2015,191 @@
         [
           {
             "node": "No results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "convert files",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "convert files": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get basic info": {
+      "main": [
+        [
+          {
+            "node": "Get basic info1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format check": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "check chatID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check chatID": {
+      "main": [
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get basic info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get basic info1": {
+      "main": [
+        [
+          {
+            "node": "Get basic info2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get basic info2": {
+      "main": [
+        [
+          {
+            "node": "Format check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Create search query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "structure": {
+      "main": [
+        [
+          {
+            "node": "Respond to Chat2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "synthesize": {
+      "main": [
+        [
+          {
+            "node": "Config1",
             "type": "main",
             "index": 0
           }
