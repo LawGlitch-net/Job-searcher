@@ -99,6 +99,7 @@
     node.querySelector(".card__description").textContent = job.description || "No description available.";
     node.querySelector(".card__badge").textContent = statusLabel(status);
 
+    // Apply Button
     const applyBtn = node.querySelector(".card__apply");
 
     if (status === "contacted") {
@@ -109,6 +110,18 @@
       applyBtn.disabled = true;
     } else {
       applyBtn.addEventListener("click", () => handleApply(job, node, applyBtn));
+    }
+
+    // View Job Button (Opens URL without updating application status)
+    const viewBtn = node.querySelector(".card__view") || node.querySelector(".card__view-job");
+    if (viewBtn) {
+      if (!job.url) {
+        viewBtn.disabled = true;
+      } else {
+        viewBtn.addEventListener("click", () => {
+          window.open(job.url, "_blank", "noopener,noreferrer");
+        });
+      }
     }
 
     return node;
