@@ -1,9 +1,5 @@
 // Job Case Files — simple CRM for tracking job applications.
 // Reads/writes public.jobs_master via the Supabase anon key (see config.js).
-// application_status enum (from the DB check constraint):
-//   new | contacted | replied | rejected | offer | ignored
-// The "Apply" button sets status to "contacted" (labeled "Applied" in the UI —
-// there's no separate "applied" value in the DB constraint today).
 
 (function () {
   const { SUPABASE_URL, SUPABASE_ANON_KEY } = window;
@@ -99,9 +95,14 @@
     node.querySelector(".card__description").textContent = job.description || "No description available.";
     node.querySelector(".card__badge").textContent = statusLabel(status);
 
-    // Apply Button (Updates Supabase Status)
+    // Grab buttons
     const applyBtn = node.querySelector(".card__apply");
+    const viewBtn = node.querySelector(".card__view");
+    const ignoreBtn = node.querySelector(".card__ignore");
 
+    // -----------------------------------------------------
+    // Apply Button Logic
+    // -----------------------------------------------------
     if (status === "contacted") {
       applyBtn.textContent = "Applied";
       applyBtn.disabled = true;
@@ -112,21 +113,36 @@
       applyBtn.addEventListener("click", () => handleApply(job, node, applyBtn));
     }
 
-    // View Job Link (Opens URL in new tab without changing status)
-    const viewBtn = node.querySelector(".btn-view");
-    if (viewBtn) {
-      if (job.url) {
-        viewBtn.href = job.url;
-      } else {
-        viewBtn.removeAttribute("href");
-        viewBtn.style.pointerEvents = "none";
-        viewBtn.style.opacity = "0.5";
-      }
+    // Disable Apply if already ignored or rejected
+    if (status === "ignored" || status === "rejected") {
+      applyBtn.disabled = true;
+    }
+
+    // -----------------------------------------------------
+    // View Job Button Logic (Opens New Tab Safely)
+    // -----------------------------------------------------
+    if (!job.url) {
+      viewBtn.disabled = true;
+    } else {
+      viewBtn.addEventListener("click", () => {
+        window.open(job.url, "_blank", "noopener,noreferrer");
+      });
+    }
+
+    // -----------------------------------------------------
+    // Not Interested (Ignore) Button Logic
+    // -----------------------------------------------------
+    if (status === "ignored") {
+      ignoreBtn.textContent = "Ignored";
+      ignoreBtn.disabled = true;
+    } else {
+      ignoreBtn.addEventListener("click", () => handleIgnore(job, node, ignoreBtn));
     }
 
     return node;
   }
 
+  // Action: Apply
   async function handleApply(job, cardEl, buttonEl) {
     window.open(job.url, "_blank", "noopener");
 
@@ -150,14 +166,48 @@
     cardEl.dataset.status = "contacted";
     cardEl.querySelector(".card__badge").textContent = statusLabel("contacted");
     buttonEl.textContent = "Applied";
+    
+    const ignoreBtn = cardEl.querySelector(".card__ignore");
+    if(ignoreBtn) ignoreBtn.disabled = false; // Optional reset
 
-    // If we're currently viewing a filtered tab that no longer includes this
-    // card (e.g. "New"), re-render so it drops out of view.
     if (activeFilter !== "all" && activeFilter !== "contacted") {
       render();
     }
   }
 
+  // Action: Not Interested
+  async function handleIgnore(job, cardEl, buttonEl) {
+    buttonEl.disabled = true;
+    buttonEl.textContent = "Updating...";
+
+    const { error } = await supabase
+      .from("jobs_master")
+      .update({ application_status: "ignored" })
+      .eq("id", job.id);
+
+    if (error) {
+      console.error(error);
+      showBanner("Couldn't update status: " + error.message);
+      buttonEl.disabled = false;
+      buttonEl.textContent = "Not Interested";
+      return;
+    }
+
+    job.application_status = "ignored";
+    cardEl.dataset.status = "ignored";
+    cardEl.querySelector(".card__badge").textContent = statusLabel("ignored");
+    buttonEl.textContent = "Ignored";
+    
+    const applyBtn = cardEl.querySelector(".card__apply");
+    if(applyBtn) applyBtn.disabled = true;
+
+    // Remove from UI immediately if user is viewing a tab where this job no longer belongs
+    if (activeFilter !== "all" && activeFilter !== "ignored") {
+      render();
+    }
+  }
+
+  // Tab Filtering
   tabs.addEventListener("click", (event) => {
     const btn = event.target.closest(".tab");
     if (!btn) return;
@@ -168,5 +218,6 @@
     render();
   });
 
+  // Initialize
   loadJobs();
 })();
