@@ -99,7 +99,7 @@
     node.querySelector(".card__description").textContent = job.description || "No description available.";
     node.querySelector(".card__badge").textContent = statusLabel(status);
 
-    // Apply Button
+    // Apply Button (Updates Supabase Status)
     const applyBtn = node.querySelector(".card__apply");
 
     if (status === "contacted") {
@@ -112,15 +112,15 @@
       applyBtn.addEventListener("click", () => handleApply(job, node, applyBtn));
     }
 
-    // View Job Button (Opens URL without updating application status)
-    const viewBtn = node.querySelector(".card__view") || node.querySelector(".card__view-job");
+    // View Job Link (Opens URL in new tab without changing status)
+    const viewBtn = node.querySelector(".btn-view");
     if (viewBtn) {
-      if (!job.url) {
-        viewBtn.disabled = true;
+      if (job.url) {
+        viewBtn.href = job.url;
       } else {
-        viewBtn.addEventListener("click", () => {
-          window.open(job.url, "_blank", "noopener,noreferrer");
-        });
+        viewBtn.removeAttribute("href");
+        viewBtn.style.pointerEvents = "none";
+        viewBtn.style.opacity = "0.5";
       }
     }
 
